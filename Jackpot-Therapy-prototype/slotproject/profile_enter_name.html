@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Enter Profile Name</title>
+  <style>
+    body {
+      background: url("purpleloan.jpg");
+      background-size: cover;
+      background-position: center;
+      font-family: "Poppins", sans-serif;
+      text-align: center;
+      color: #4b3b66;
+      padding-top: 60px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    h1 { color: #e9e1fb; margin-bottom: 25px; }
+
+    .input-container {
+      background: rgba(255,255,255,0.8);
+      border-radius: 15px;
+      border: 2px solid #cbb7f3;
+      padding: 25px;
+      width: 320px;
+      margin: 0 auto;
+      box-shadow: 0 4px 10px rgba(106,76,175,0.2);
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 2px solid #cbb7f3;
+      border-radius: 8px;
+      outline: none;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    input:focus {
+      border-color: #6a4caf;
+      background-color: rgba(255,255,255,0.9);
+    }
+
+    button {
+      background-color: #cbb7f3;
+      border: none;
+      color: #4b3b66;
+      padding: 10px 25px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    button:hover { background-color: #bda7f0; }
+
+    #selectedImg {
+      display: block;
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 15px auto;
+      border-radius: 50%;
+      border: 3px solid #cbb7f3;
+    }
+
+    /* Quit button animation */
+    #quitBtn {
+      margin-top: 25px;
+      background-color: #cbb7f3;
+      color: black;
+      box-shadow: 0 0 10px #8207da;
+      animation: pulseBlue 2s infinite;
+    }
+
+    @keyframes pulseBlue {
+      0% { box-shadow: 0 0 10px #8207da; }
+      50% { box-shadow: 0 0 25px #8207da; }
+      100% { box-shadow: 0 0 10px #8207da; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Enter Your Profile Name</h1>
+
+  <div class="input-container">
+    <img id="selectedImg" src="" alt="Selected Profile">
+    <input id="playerName" type="text" placeholder="Type your name..." autofocus>
+    <br>
+    <button id="startBtn">Start Game</button>
+    <br>
+    <button id="quitBtn">Quit</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const input = document.getElementById("playerName");
+        const selectedImg = document.getElementById("selectedImg");
+
+        // Load selected profile picture
+        const profileImg = localStorage.getItem("selectedProfileImg");
+        if (profileImg) selectedImg.src = profileImg;
+
+        // Fade in
+        setTimeout(() => { body.style.opacity = "1"; }, 50);
+        input.focus();
+
+        // Start button
+        document.getElementById("startBtn").addEventListener("click", () => {
+            const name = input.value.trim();
+            if (!name) {
+                alert("Please enter your name!");
+                return;
+            }
+
+            // Create player profile
+            const playerProfile = {
+                name,
+                picture: profileImg || "1.png",
+                balance: 1000,
+                totalDebt: 0,
+                totalLoans: [],
+                hasTakenLoan: false
+            };
+
+            localStorage.setItem("playerProfile", JSON.stringify(playerProfile));
+            localStorage.setItem("hasPlayedBefore", "true");
+
+            // Fade out & redirect
+            body.style.opacity = "0";
+            setTimeout(() => {
+                window.location.href = "microtransactions.html";
+            }, 400);
+        });
+
+        // Quit button
+        document.getElementById("quitBtn").addEventListener("click", () => {
+            body.style.opacity = "0";
+            setTimeout(() => {
+                window.location.href = "end_scene.html"; // Return to main screen
+            }, 400);
+        });
+    });
+  </script>
+</body>
+</html>

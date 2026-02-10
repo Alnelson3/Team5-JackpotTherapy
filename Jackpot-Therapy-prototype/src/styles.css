@@ -1,0 +1,351 @@
+button.open {
+    background-color: #9d7fd5;
+    color: white;
+    padding: 15px 50px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: rgb(194, 128, 255) 1px 1px 2px;
+    display: inline-block;
+    font-size: 32px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 15%;
+    font-family: 'videophreak', sans-serif;
+    border: 3px black solid;
+    box-shadow: rgb(136, 0, 255) 1px 1px 10px;
+    position: absolute; 
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-text-stroke:#000000 1px;
+}
+
+button.closed {
+    background-color:  #8f74c3;
+    color: rgb(228, 228, 228);
+    padding: 15px 50px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: rgb(199, 121, 255) -1px 0px 2px;
+    display: inline-block;
+    font-size: 32px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 15%;
+    font-family: 'videophreak', sans-serif;
+    border: 3px black solid;
+    box-shadow: rgb(255, 255, 255) -1px -1px 5px;
+    position: absolute; 
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-text-stroke:#000000 1px
+}
+
+h1.title {
+    font-family: 'videophreak', sans-serif;
+    font-size: 80px;
+    text-shadow: rgb(144, 0, 255) 0px 0px 20px;
+    color: #c19fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 12vh;
+    text-align: center;
+    -webkit-text-stroke:#000000 1px;
+}
+
+img.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+img.avatar3 {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 150px;
+    height: auto;
+    border-radius: 10%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+}
+
+img.avatar1 {
+    position:absolute;
+    top: 27%;
+    left: 38.7%;
+    width: 400px;
+    height: auto;
+    border-radius: 10%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+}
+
+img.avatar2 {
+    position: absolute;
+    top: 40%;
+    width: 150px;
+    height: auto;
+    border-radius: 10%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+}
+
+h1.profileName {
+    font-family: 'videophreak', sans-serif;
+    font-size: 40px;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px #000000;
+    position: absolute;
+    left: 10%;
+}
+
+img.slotMachine {
+    position:absolute;
+    top: 27%;
+    left: 38.7%;
+    width: 400px;
+    height: 400px;
+    border-radius: 10%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 1);
+}
+
+img.profileIcon {
+    position: absolute;
+    top: 40%;
+    width: 150px;
+    height: auto;
+    border-radius: 10%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+}
+
+img.profileIconSelected {
+    position: absolute;
+    top: 40%;
+    width: 150px;
+    height: auto;
+    border-radius: 10%;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 1);
+    border: 3px solid gold;
+}
+
+div.dropDownMenu {
+    position: absolute;
+    top: 12%;
+    left: 50%;
+    width: 300px;
+    height: 380px;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 2px solid #000000;
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+button.disabled {
+    background-color: grey;
+    color: darkgrey;
+    padding: 15px 50px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: none;
+    display: inline-block;
+    font-size: 32px;
+    margin: 4px 2px;
+    cursor: not-allowed;
+    border-radius: 15%;
+    font-family: 'videophreak', sans-serif;
+    border: 3px black solid;
+    box-shadow: none;
+    position: absolute; 
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-text-stroke:#000000 1px;
+}   
+
+h1.loseScreen {
+    font-family: 'videophreak', sans-serif;
+    font-size: 50px;
+    text-shadow: rgb(144, 0, 255) 0px 0px 20px;
+    color: #c19fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 20vh;
+    text-align: center;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    padding: 20px;
+    background-color: #d4bcff;
+    border-radius: 10%;
+    outline: #000000 solid 3px;
+    transform: translateX(-50%);
+    -webkit-text-stroke:#000000 1px;
+}
+
+/* ===== TITLE SCREEN ELEMENTS ===== */
+
+/* Title Screen Container */
+.title-screen-container {
+    position: relative;
+    margin-top: 5%;
+    width: 60%;
+    height: 80vh;
+    left: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../images/purple-background.jpg');
+    border-radius: 2%;
+    background-size: cover;
+    pointer-events: none;
+}
+
+.title-screen-container h1.title  {
+    position: absolute;
+    top: 36.5%;
+    left: 70%;
+    transform: translateX(-50%);
+    margin: 0;
+    z-index: 10;
+}
+.title-screen-container button.open,
+.title-screen-container button.closed {
+    scale: .66;
+    top: 70%;
+    left: 67%;
+}
+
+.title-screen-container > * {
+    pointer-events: auto;
+}
+
+/* Welcome Sign Image */
+.welcome-sign-img {
+    position: absolute;
+    top: -6%;
+    left: 70%;
+    transform: translateX(-50%);
+    max-width: 600px;
+    width: 80%;
+    height: auto;
+    filter: drop-shadow(0 0 20px rgba(157, 127, 213, 0.8));
+    z-index: 10;
+}
+
+/* Subtitle Styling */
+.subtitle {
+    font-family: 'videophreak', sans-serif;
+    font-size: 25px;
+    text-shadow: rgb(144, 0, 255) 0px 0px 15px;
+    color: #c19fff;
+    text-align: center;
+    -webkit-text-stroke: #000000 1px;
+    position: absolute;
+    top: 58%;
+    left: 70%;
+    transform: translateX(-50%);
+    margin: 0;
+    z-index: 10;
+}
+
+/* Slot Machine Image on Title Screen */
+.slot-machine-img {
+    position: absolute;
+    scale: 2;
+    top: 30%;
+    left: 40%;
+    transform: translateX(-50%);
+    max-width: 450px;
+    width: 70%;
+    height: auto;
+    filter: drop-shadow(0 0 25px rgba(157, 127, 213, 0.8));
+    z-index: 5;
+}
+
+
+/* Theme Manager */
+
+:root {
+    --btn-bg: #9d7fd5;
+    --btn-text-color: white;
+    --btn-border-color: black;
+    --btn-shadow-color: rgb(136, 0, 255);
+}
+
+
+/* Purple Theme */
+body.theme-purple {
+    --btn-bg: #b784f4;
+    --btn-text-color: white;
+    --btn-shadow-color: #cfa6ff;
+}
+
+/* Blue Theme */
+body.theme-blue {
+    --btn-bg: #7bb6ff;
+    --btn-text-color: white;
+    --btn-shadow-color: #a8d4ff;
+}
+
+/* Dark Theme */
+body.theme-dark {
+    --btn-bg: #444444;
+    --btn-text-color: #ffffff;
+    --btn-shadow-color: #888888;
+}
+
+
+/* Apply variables */
+.background {
+    background-image: var(--bg-image);
+}
+
+button.open, button.closed {
+    background-color: var(--btn-bg);
+    color: var(--btn-text-color);
+    border: 3px solid var(--btn-border-color);
+    box-shadow: 1px 1px 10px var(--btn-shadow-color);
+}
+
+#themeManager {
+  position: relative;
+  padding-top: 10px;    /* enough space for title */
+  min-height: 30vh;     /* full viewport height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  background-color: white;
+}
+
+#themeManager h1 {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-family: 'videophreak', sans-serif;
+  font-size: 2rem;
+  z-index: 10;
+}
+
+#themeManager button {
+  position: relative !important;  /* override global absolute */
+  transform: none !important;
+  top: auto !important;
+  left: 6%;
+  width: 150px;
+  padding: 12px 0;
+  font-size: 20px;
+  border-radius: 12%;
+  cursor: pointer;
+}

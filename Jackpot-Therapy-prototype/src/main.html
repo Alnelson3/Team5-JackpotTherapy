@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jackpot-Therapy</title>
+    <script src="main.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+    @import url('https://fonts.cdnfonts.com/css/videophreak');
+    </style>
+</head>
+<body>
+    <!--Just title screen elements-->
+    <div class="title-screen-container">
+        <img src="../images/welcome-sign.png" class="welcome-sign-img" id="welcomeSign" alt="Welcome Sign">
+        <h1 class="title" id="titleText"><strong>Jackpot Therapy</strong></h1>
+        <p class="subtitle">Fortune machine</p>
+        <img src="../images/slot-machine.png" class="slot-machine-img" id="slotMachineTitle" alt="Slot Machine">
+        <button class="open" id="startButton">PLAY NOW</button>
+    </div>
+    <!--Just profile screen elements-->
+    <img src="../images/Avatars/createNew.png" class="avatar2" id="createNewProfile" style="display: none; top: 27%; left: 5%; clickable: true;">
+    <h1 class="title" id="profileText" style="display: none;"><strong>Select an Avatar</strong></h1>
+    <button class="open" id="selectButton" style="display: none; top: 85%;">✔</button>
+    <button class="open" id="selectLeftButton" style="display: none; top: 85%; left: 30%;">＜</button>
+    <button class="open" id="selectRightButton" style="display: none; top: 85%; left: 70%;">＞</button>
+    <!--avatarSelectMid appears in main and character select-->
+    <img src="../images/Avatars/1.png" class="avatar1" id="avatarSelectMid" style="display: none;">
+    <img src="../images/Avatars/10.png" class="avatar2" id="avatarSelectLeft" style="display: none; left: 20%;">
+    <img src="../images/Avatars/2.png" class="avatar2" id="avatarSelectRight" style="display: none; left: 70%;">
+    <!--Main Screen Elements-->
+    <h1 class="profileName" id="profileName" style="display: none;">Dillon K</h1>
+    <h1 class="profileName" id="balance" style="display: none; top: 6%;">$1,000.00</h1>
+    <img src="../images/Icons/1.png" style="display: none; left: 5%;" class="slotMachine" id="slot1">
+    <img src="../images/Icons/2.png" style="display: none; left: 39%;" class="slotMachine" id="slot2">
+    <img src="../images/Icons/3.png" style="display: none; left: 70%;" class="slotMachine" id="slot3">
+    <button class="open" style="top: 80%; left: 50%; display: none;" id="spinButton">SPIN</button>
+    <h1 class="profileName" id="debtElement" style="top: 750px; left: 88%; display: none;"><strong>Debt: $</strong><strong id="debtNum">0</strong></h1>
+    <button class="open" style="top: 93%; left: 93%; display: none;" id="loanButton">Loan</button>
+    <button class="open" style="top: 5%; left: 50%; display: none;" id="betButton">↓  Bet: <strong>$</strong><strong id="betAmount">100</strong>  ↓</button>
+    <audio src="../sounds/spin.mp3" id="spinSound"></audio>
+    <audio src="../sounds/jackpot.mp3" id="jackpotSound"></audio>
+    <div id="amountOptions" style="display: none;" class="dropDownMenu">
+        <button class="open" style="top: 50px; width: 250px;" id="bet10">10</button>
+        <button class="open" style="top: 140px; width: 250px;" id="bet100">100</button>
+        <button class="open" style="top: 240px; width: 250px;" id="bet1000">1,000</button>
+        <button class="open" style="top: 340px; width: 250px;" id="betAll">ALL IN</button>
+    </div>
+    <h1 class="loseScreen" id="loseScreen" style="display: none;">
+        You are out of money and in debt!
+        <br>
+        You Lose.
+    </h1>
+
+    <!--Universal Elements-->
+    <img src="../images/TitleScreen.jpg" class="background" id="background">
+    <audio src="../sounds/music.mp3" id="music" autoplay loop volume="0.5"></audio>
+    <audio src="../sounds/click.mp3" id="clickSound"></audio>
+    <button class="open" id="backOrQuitButton" style="top: 93%; left: 7%;">Quit</button>
+
+    <!-- Theme Button (Main Screen Only) -->
+    <button class="open" id="themeButton" 
+        style="top: 5%; left: 90%; display: none; position: absolute;">
+    🎨
+    </button>
+
+    <!-- Theme Manager Panel -->
+    <div id="themeManager" class="dropDownMenu" 
+        style="display: none; top: 15%; left: 50%; width: 350px; height: auto;">
+        <h2 style="text-align:center; font-family: 'videophreak';">Theme Manager</h2>
+        <button class="open" style="width: 300px; top: 80px;" id="themePurple">💜 Purple</button>
+        <button class="open" style="width: 300px; top: 160px;" id="themeBlue">💙 Blue</button>
+        <button class="open" style="width: 300px; top: 240px;" id="themeDark">🖤 Dark</button>
+        <button class="open" style="width: 300px; top: 320px;" id="closeThemeManager">Close</button>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Profile Picture</title>
+    <style>
+        body {
+            background: url(ProfileScreen.jpg);
+            color: #4b3b66;
+            font-family: "Poppins", sans-serif;
+            text-align: center;
+            padding: 30px;
+        }
+
+        h1 { color: #e9e1fb; margin-bottom: 30px; }
+
+        .profiles-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 3px solid #cbb7f3;
+            border-radius: 15px;
+            padding: 10px;
+            width: 120px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .profile-card:hover {
+            transform: scale(1.2);
+            border-color: #6a4caf;
+            background-color: rgba(200, 175, 255, 0.3);
+        }
+
+        .profile-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        #message { margin-top: 10px; font-size: 1rem; }
+    </style>
+</head>
+<body>
+    <h1>Select Your Profile Picture</h1>
+
+    <div class="profiles-container">
+        <div class="profile-card" data-img="1.png">
+            <img src="1.png" alt="Profile 1">
+            <p>Profile 1</p>
+        </div>
+        <div class="profile-card" data-img="3.png">
+            <img src="3.png" alt="Profile 2">
+            <p>Profile 2</p>
+        </div>
+        <div class="profile-card" data-img="10.png">
+            <img src="10.png" alt="Profile 3">
+            <p>Profile 3</p>
+        </div>
+    </div>
+
+    <p id="message"></p>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const message = document.getElementById("message");
+
+            document.querySelectorAll(".profile-card").forEach(card => {
+                card.addEventListener("click", () => {
+                    const selectedProfileImg = card.dataset.img;
+                    if (!selectedProfileImg) {
+                        message.innerText = "Error: No profile image selected.";
+                        return;
+                    }
+
+                    // Store selected image & clear old profile
+                    localStorage.setItem("selectedProfileImg", selectedProfileImg);
+                    localStorage.removeItem("playerProfile");
+                    localStorage.removeItem("hasPlayedBefore");
+
+                    // Fade-out and redirect
+                    document.body.style.transition = "opacity 0.4s ease";
+                    document.body.style.opacity = "0";
+                    setTimeout(() => {
+                        window.location.href = "profile_enter_name.html";
+                    }, 400);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

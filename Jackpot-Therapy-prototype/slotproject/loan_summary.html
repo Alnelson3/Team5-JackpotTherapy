@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loan Summary</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    html { background-color: #1a0f2e; }
+
+        body {
+            background: url(beachloansum.jpg);
+            color: #4b3b66;
+            font-family: "Poppins", sans-serif;
+            text-align: center;
+            padding: 30px;
+        }
+        h1 { color: #6a4caf; margin-bottom: 20px; }
+        .summary-box {
+            background: rgba(255,255,255,0.8);
+            border: 1px solid #cbb7f3;
+            border-radius: 15px;
+            padding: 25px;
+            width: 340px;
+            margin: 25px auto;
+            box-shadow: 0 4px 10px rgba(106,76,175,0.2);
+            backdrop-filter: blur(6px);
+        }
+        .summary-box p { margin: 10px 0; font-size: 1.1rem; }
+        button {
+            background-color: #cbb7f3; border:none; color:#4b3b66;
+            padding:10px 25px; margin:10px; border-radius:8px;
+            cursor:pointer; font-weight:600; transition:0.2s;
+        }
+        button:hover { background-color: #bda7f0; }
+        #message { margin-top:10px; font-size:1rem; }
+        details {
+            background: rgba(255,255,255,0.6);
+            border: 1px solid #d7c3f7;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 15px;
+            color: #4b3b66;
+        }
+        summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: #6a4caf;
+        }
+        ul { list-style:none; padding:0; margin-top:10px; }
+        li { background-color: rgba(200,175,255,0.2); padding:8px; margin:5px 0; border-radius:6px; }
+    </style>
+</head>
+<body>
+    <h1>Loan Summary</h1>
+
+    <div class="summary-box">
+        <p><strong>Player:</strong> <span id="playerName"></span></p>
+        <p><strong>Balance:</strong> $<span id="balance"></span></p>
+        <p><strong>Total Debt:</strong> $<span id="debt"></span></p>
+        <p><strong>Net Balance:</strong> $<span id="netBalance"></span></p>
+        <p><strong>Time Played:</strong> <span id="timePlayed">--:--</span></p>
+
+        <!-- Collapsible Loan History -->
+        <details id="loanDetails">
+            <summary>View Loan History</summary>
+            <ul id="loanList"></ul>
+        </details>
+    </div>
+
+    <button id="returnBtn">Back to Loan Page</button>
+    <button id="quitBtn">Quit</button>
+
+    <p id="message"></p>
+
+    <script src="loan_summary.js"></script>
+</body>
+</html>
+
+

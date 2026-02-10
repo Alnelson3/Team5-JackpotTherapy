@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Microtransactions – Loan Center</title>
+    <style>
+        body {
+            background: url(mircotrans.jpg);
+            background-size: cover;
+            background-position: center;
+            color: #4b3b66;
+            font-family: "Poppins", sans-serif;
+            text-align: center;
+            padding: 30px;
+        }
+
+        h1 { color: #6a4caf; margin-bottom: 10px; }
+
+        .info-box {
+            background: rgba(255,255,255,0.8);
+            border: 1px solid #cbb7f3;
+            border-radius: 15px;
+            padding: 20px;
+            width: 340px;
+            margin: 20px auto;
+            box-shadow: 0 4px 10px rgba(106,76,175,0.2);
+            backdrop-filter: blur(6px);
+        }
+
+        button {
+            background-color: #cbb7f3;
+            border: none;
+            color: #4b3b66;
+            padding: 10px 20px;
+            margin: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        button:hover:not(:disabled) { background-color: #bda7f0; }
+
+        button:disabled {
+            background-color: #e5e0ee;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        details {
+            background: rgba(255,255,255,0.6);
+            border: 1px solid #d7c3f7;
+            border-radius: 10px;
+            padding: 10px;
+            width: 340px;
+            margin: 10px auto;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: #6a4caf;
+        }
+
+        ul { list-style:none; padding:0; margin-top:10px; }
+        li { background-color: rgba(200,175,255,0.2); padding:8px; margin:5px 0; border-radius:6px; }
+
+        #continueBox { margin-top: 25px; }
+        #message { color: #4b3b66; font-size:1rem; margin-top:10px; }
+        .dual-buttons { display:flex; justify-content:center; gap:10px; }
+
+        /* Pulsing Quit Button */
+        #quitBtn {
+            background-color: #cbb7f3;
+            color: #010101;
+            box-shadow: 0 0 10px #8207da;
+            animation: pulseBlue 2s infinite;
+        }
+
+        @keyframes pulseBlue {
+            0% { box-shadow: 0 0 10px #8207da; }
+            50% { box-shadow: 0 0 25px #8207da; }
+            100% { box-shadow: 0 0 10px #8207da; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Loan Center</h1>
+
+    <div class="info-box">
+        <p><strong>Player:</strong> <span id="playerName"></span></p>
+        <p><strong>Balance:</strong> $<span id="balance"></span></p>
+        <p><strong>Total Debt:</strong> $<span id="debt"></span></p>
+        <p><strong>Time Played:</strong> <span id="timePlayed">--:--</span></p>
+    </div>
+
+    <div class="info-box">
+        <h3>Take Out a Loan</h3>
+        <button class="loanOption" data-amount="100">Borrow $100</button>
+        <button class="loanOption" data-amount="500">Borrow $500</button>
+        <button class="loanOption" data-amount="1000">Borrow $1000</button>
+        <button class="loanOption" data-amount="5000">Borrow $5000</button>
+        <br>
+        <button id="noLoan">No Loan</button>
+    </div>
+
+    <details class="loan-history">
+        <summary>View Loan History</summary>
+        <ul id="loanList"></ul>
+    </details>
+
+    <div id="continueBox">
+        <div class="dual-buttons">
+            <button id="continueBtn">Continue</button>
+            <button id="quitBtn">Quit</button>
+        </div>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        // Load profile or initialize
+        let playerProfile = JSON.parse(localStorage.getItem("playerProfile")) || {
+            name: "Player1",
+            balance: 1000,
+            totalDebt: 0,
+            totalLoans: [],
+            hasTakenLoan: false
+        };
+
+        // Update UI
+        function updateUI() {
+            document.getElementById("playerName").innerText = playerProfile.name;
+            document.getElementById("balance").innerText = playerProfile.balance.toFixed(2);
+            document.getElementById("debt").innerText = playerProfile.totalDebt.toFixed(2);
+            if (playerProfile.hasTakenLoan) document.getElementById("noLoan").disabled = true;
+        }
+
+        // Display loan history
+        function displayLoanHistory() {
+            const list = document.getElementById("loanList");
+            if (playerProfile.totalLoans.length === 0) {
+                list.innerHTML = "<li>No loans taken yet.</li>";
+            } else {
+                list.innerHTML = playerProfile.totalLoans.map(
+                    loan => `<li>💵 Borrowed $${loan.amount} (Due: $${loan.totalDue.toFixed(2)})
+                             <br><small>Time: ${loan.timeTaken}</small></li>`
+                ).join("");
+            }
+        }
+
+        function saveProfile() {
+            localStorage.setItem("playerProfile", JSON.stringify(playerProfile));
+        }
+
+        class MicrotransactionManager {
+            constructor() { this.interestRate = 0.05; }
+
+            grantLoan(amount) {
+                const interest = amount * this.interestRate;
+                const totalDue = amount + interest;
+                playerProfile.balance += amount;
+                playerProfile.totalDebt += totalDue;
+                playerProfile.totalLoans.push({
+                    amount, interest, totalDue,
+                    timeTaken: new Date().toLocaleTimeString()
+                });
+                if (!playerProfile.hasTakenLoan) playerProfile.hasTakenLoan = true;
+                updateUI();
+                displayLoanHistory();
+                saveProfile();
+                document.getElementById("message").innerText = `You borrowed $${amount}.`;
+            }
+        }
+
+        const microtx = new MicrotransactionManager();
+
+        document.querySelectorAll(".loanOption").forEach(btn => {
+            btn.addEventListener("click", e => {
+                const amount = parseInt(e.target.dataset.amount);
+                microtx.grantLoan(amount);
+            });
+        });
+
+        document.getElementById("noLoan").addEventListener("click", () => {
+            playerProfile.hasTakenLoan = true;
+            saveProfile();
+            updateUI();
+            document.getElementById("message").innerText = "No loan selected.";
+        });
+
+        document.getElementById("continueBtn").addEventListener("click", () => {
+            window.location.href = "loan_summary.html";
+        });
+
+        // Quit button (pulsing blue animation)
+        document.getElementById("quitBtn").addEventListener("click", () => {
+            document.body.style.opacity = "0";
+            setTimeout(() => {
+                window.location.href = "end_scene.html";
+            }, 400);
+        });
+
+        updateUI();
+        displayLoanHistory();
+    </script>
+</body>
+</html>
