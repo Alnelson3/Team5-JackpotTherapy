@@ -1,9 +1,3 @@
-/* ============================================================
-   JACKPOT THERAPY — main.js
-   Fully rebuilt: screen-based navigation, all game logic,
-   win effects, jackpot banner, lose screen restart, theme fix.
-   ============================================================ */
-
 // ── Audio ──────────────────────────────────────────────────────
 const music       = document.getElementById('music');
 const clickSound  = document.getElementById('clickSound');
@@ -191,7 +185,6 @@ function startMusic() {
 
 // ============================================================
 //  NAVIGATION
-// ============================================================
 
 // Title → Profile Select
 startButton.onmousedown = function () {
@@ -396,7 +389,7 @@ function resetToTitle() {
 
 // ============================================================
 //  BETTING
-// ============================================================
+
 betButton.onmousedown = function () {
     buttonClick(betButton, () => {
         amountOptions.style.display = amountOptions.style.display === 'none' ? '' : 'none';
@@ -420,7 +413,7 @@ betAll.onmousedown  = function () { buttonClick(betAll,  () => selectBet('ALL IN
 
 // ============================================================
 //  LOANS
-// ============================================================
+
 loanButton.onmousedown = function () {
     buttonClick(loanButton, () => {
         if (loanButton.textContent.includes('Pay Back')) {
@@ -443,7 +436,7 @@ loanButton.onmousedown = function () {
 
 // ============================================================
 //  SPINNING
-// ============================================================
+
 spinButton.onmousedown = function () {
     if (spinButton.classList.contains('disabled') || isSpinning) return;
     buttonClick(spinButton, () => startSpin());
@@ -555,7 +548,7 @@ function highlightReels(reels) {
 
 // ============================================================
 //  BROKE CHECK
-// ============================================================
+
 function startBrokeCheck() {
     stopBrokeCheck();
     brokeCheckInterval = setInterval(brokeCheck, 500);
@@ -579,7 +572,7 @@ function brokeCheck() {
 
 // ============================================================
 //  LOSE SCREEN
-// ============================================================
+
 function showLoseScreen() {
     loseScreen.style.display = 'flex';
     music.pause();
@@ -611,7 +604,7 @@ loseQuitButton.onmousedown = function () {
 
 // ============================================================
 //  THEME MANAGER
-// ============================================================
+
 themeButton.onmousedown = function () {
     buttonClick(themeButton, () => {
         themeManager.style.display = themeManager.style.display === 'none' ? '' : 'none';
@@ -634,9 +627,9 @@ themeGold.onmousedown   = function () { buttonClick(themeGold,   () => applyThem
 
 // ============================================================
 //  INIT
-// ============================================================
+
 window.addEventListener('load', () => {
-    // Music starts on first user interaction (browser policy)
+    // Music starts on first user interaction
     document.addEventListener('click', startMusic, { once: true });
     document.addEventListener('mousedown', startMusic, { once: true });
 });
