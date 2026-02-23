@@ -7,72 +7,164 @@
     <script src="main.js" defer></script>
     <link rel="stylesheet" href="styles.css">
     <style>
-    @import url('https://fonts.cdnfonts.com/css/videophreak');
+        @import url('https://fonts.cdnfonts.com/css/videophreak');
     </style>
 </head>
 <body>
-    <!--Just title screen elements-->
-    <div class="title-screen-container">
-        <img src="../images/welcome-sign.png" class="welcome-sign-img" id="welcomeSign" alt="Welcome Sign">
-        <h1 class="title" id="titleText"><strong>Jackpot Therapy</strong></h1>
-        <p class="subtitle">Fortune machine</p>
-        <img src="../images/slot-machine.png" class="slot-machine-img" id="slotMachineTitle" alt="Slot Machine">
-        <button class="open" id="startButton">PLAY NOW</button>
-    </div>
-    <!--Just profile screen elements-->
-    <img src="../images/Avatars/createNew.png" class="avatar2" id="createNewProfile" style="display: none; top: 27%; left: 5%; clickable: true;">
-    <h1 class="title" id="profileText" style="display: none;"><strong>Select an Avatar</strong></h1>
-    <button class="open" id="selectButton" style="display: none; top: 85%;">✔</button>
-    <button class="open" id="selectLeftButton" style="display: none; top: 85%; left: 30%;">＜</button>
-    <button class="open" id="selectRightButton" style="display: none; top: 85%; left: 70%;">＞</button>
-    <!--avatarSelectMid appears in main and character select-->
-    <img src="../images/Avatars/1.png" class="avatar1" id="avatarSelectMid" style="display: none;">
-    <img src="../images/Avatars/10.png" class="avatar2" id="avatarSelectLeft" style="display: none; left: 20%;">
-    <img src="../images/Avatars/2.png" class="avatar2" id="avatarSelectRight" style="display: none; left: 70%;">
-    <!--Main Screen Elements-->
-    <h1 class="profileName" id="profileName" style="display: none;">Dillon K</h1>
-    <h1 class="profileName" id="balance" style="display: none; top: 6%;">$1,000.00</h1>
-    <img src="../images/Icons/1.png" style="display: none; left: 5%;" class="slotMachine" id="slot1">
-    <img src="../images/Icons/2.png" style="display: none; left: 39%;" class="slotMachine" id="slot2">
-    <img src="../images/Icons/3.png" style="display: none; left: 70%;" class="slotMachine" id="slot3">
-    <button class="open" style="top: 80%; left: 50%; display: none;" id="spinButton">SPIN</button>
-    <h1 class="profileName" id="debtElement" style="top: 750px; left: 88%; display: none;"><strong>Debt: $</strong><strong id="debtNum">0</strong></h1>
-    <button class="open" style="top: 93%; left: 93%; display: none;" id="loanButton">Loan</button>
-    <button class="open" style="top: 5%; left: 50%; display: none;" id="betButton">↓  Bet: <strong>$</strong><strong id="betAmount">100</strong>  ↓</button>
+
+    <!-- ===== BACKGROUND ===== -->
+    <img src="../images/TitleScreen.jpg" class="background" id="background" alt="Background">
+
+    <!-- ===== AUDIO ===== -->
+    <audio src="../sounds/music.mp3" id="music" loop></audio>
+    <audio src="../sounds/click.mp3" id="clickSound"></audio>
     <audio src="../sounds/spin.mp3" id="spinSound"></audio>
     <audio src="../sounds/jackpot.mp3" id="jackpotSound"></audio>
-    <div id="amountOptions" style="display: none;" class="dropDownMenu">
-        <button class="open" style="top: 50px; width: 250px;" id="bet10">10</button>
-        <button class="open" style="top: 140px; width: 250px;" id="bet100">100</button>
-        <button class="open" style="top: 240px; width: 250px;" id="bet1000">1,000</button>
-        <button class="open" style="top: 340px; width: 250px;" id="betAll">ALL IN</button>
+
+    <!-- ===== UNIVERSAL BUTTON (always visible) ===== -->
+    <button class="open nav-btn" id="backOrQuitButton">Quit</button>
+
+    <!-- ============================================================ -->
+    <!--  TITLE SCREEN                                                -->
+    <!-- ============================================================ -->
+    <div class="screen" id="screen-title">
+        <div class="title-screen-container">
+            <img src="../images/welcome-sign.png" class="welcome-sign-img" alt="Welcome Sign">
+            <h1 class="title" id="titleText"><strong>Jackpot Therapy</strong></h1>
+            <p class="subtitle">Fortune Machine</p>
+            <img src="../images/slot-machine.png" class="slot-machine-img" alt="Slot Machine">
+            <button class="open title-play-btn" id="startButton">PLAY NOW</button>
+        </div>
     </div>
-    <h1 class="loseScreen" id="loseScreen" style="display: none;">
-        You are out of money and in debt!
-        <br>
-        You Lose.
-    </h1>
 
-    <!--Universal Elements-->
-    <img src="../images/TitleScreen.jpg" class="background" id="background">
-    <audio src="../sounds/music.mp3" id="music" autoplay loop volume="0.5"></audio>
-    <audio src="../sounds/click.mp3" id="clickSound"></audio>
-    <button class="open" id="backOrQuitButton" style="top: 93%; left: 7%;">Quit</button>
+    <!-- ============================================================ -->
+    <!--  PROFILE SELECT SCREEN                                       -->
+    <!-- ============================================================ -->
+    <div class="screen" id="screen-profile-select" style="display:none;">
+        <h1 class="screen-title" id="profileText">Select Profile</h1>
+        <div class="profile-select-grid" id="profileGrid">
+            <!-- createNew card -->
+            <div class="profile-card" id="createNewProfile" data-index="0">
+                <img src="../images/Avatars/createNew.png" alt="Create New">
+                <span>New Profile</span>
+            </div>
+            <!-- saved profile cards injected by JS -->
+        </div>
+        <!-- select button only shown when a card is highlighted -->
+        <button class="open profile-confirm-btn" id="selectButton" style="display:none;">✔ Select</button>
+    </div>
 
-    <!-- Theme Button (Main Screen Only) -->
-    <button class="open" id="themeButton" 
-        style="top: 5%; left: 90%; display: none; position: absolute;">
-    🎨
-    </button>
+    <!-- ============================================================ -->
+    <!--  AVATAR SELECT SCREEN                                        -->
+    <!-- ============================================================ -->
+    <div class="screen" id="screen-avatar-select" style="display:none;">
+        <h1 class="screen-title">Select an Avatar</h1>
+        <div class="avatar-carousel">
+            <button class="open carousel-btn" id="selectLeftButton">＜</button>
+            <div class="avatar-stage">
+                <img src="../images/Avatars/10.png" class="avatar-side left-avatar"  id="avatarSelectLeft"  alt="Left Avatar">
+                <img src="../images/Avatars/1.png"  class="avatar-center"            id="avatarSelectMid"   alt="Selected Avatar">
+                <img src="../images/Avatars/2.png"  class="avatar-side right-avatar" id="avatarSelectRight" alt="Right Avatar">
+            </div>
+            <button class="open carousel-btn" id="selectRightButton">＞</button>
+        </div>
+        <button class="open profile-confirm-btn" id="confirmAvatarButton">✔ Choose</button>
+    </div>
 
-    <!-- Theme Manager Panel -->
-    <div id="themeManager" class="dropDownMenu" 
-        style="display: none; top: 15%; left: 50%; width: 350px; height: auto;">
-        <h2 style="text-align:center; font-family: 'videophreak';">Theme Manager</h2>
-        <button class="open" style="width: 300px; top: 80px;" id="themePurple">💜 Purple</button>
-        <button class="open" style="width: 300px; top: 160px;" id="themeBlue">💙 Blue</button>
-        <button class="open" style="width: 300px; top: 240px;" id="themeDark">🖤 Dark</button>
-        <button class="open" style="width: 300px; top: 320px;" id="closeThemeManager">Close</button>
+    <!-- ============================================================ -->
+    <!--  NAME ENTRY SCREEN                                           -->
+    <!-- ============================================================ -->
+    <div class="screen" id="screen-name-entry" style="display:none;">
+        <h1 class="screen-title">Enter Your Name</h1>
+        <div class="name-entry-box">
+            <div class="name-input-wrapper">
+                <input type="text" id="nameInput" class="name-input" placeholder="Your name..." maxlength="18" autocomplete="off">
+            </div>
+            <button class="open profile-confirm-btn" id="confirmNameButton">✔ Let's Go!</button>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!--  MAIN GAME SCREEN                                            -->
+    <!-- ============================================================ -->
+    <div class="screen" id="screen-main" style="display:none;">
+
+        <!-- HUD Top Bar -->
+        <div class="hud-bar">
+            <div class="hud-left">
+                <img src="../images/Avatars/1.png" class="hud-avatar" id="hudAvatar" alt="Player Avatar">
+                <div class="hud-info">
+                    <span class="hud-name"  id="profileName">Player</span>
+                    <span class="hud-balance" id="balance">$1,000</span>
+                </div>
+            </div>
+            <div class="hud-right">
+                <span class="hud-debt" id="debtElement" style="display:none;">Debt: $<span id="debtNum">0</span></span>
+                <button class="open theme-btn" id="themeButton">🎨</button>
+            </div>
+        </div>
+
+        <!-- Slot Reels -->
+        <div class="slot-stage">
+            <div class="reel-wrapper">
+                <div class="reel" id="reel1">
+                    <img src="../images/Icons/1.png" id="slot1" alt="Slot 1">
+                </div>
+                <div class="reel" id="reel2">
+                    <img src="../images/Icons/2.png" id="slot2" alt="Slot 2">
+                </div>
+                <div class="reel" id="reel3">
+                    <img src="../images/Icons/3.png" id="slot3" alt="Slot 3">
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Controls -->
+        <div class="game-controls">
+            <button class="open bet-btn" id="betButton">↓ Bet: $<strong id="betAmount">100</strong> ↓</button>
+            <button class="open spin-btn" id="spinButton">SPIN</button>
+            <button class="open loan-btn" id="loanButton">Loan</button>
+        </div>
+
+        <!-- Bet Dropdown -->
+        <div id="amountOptions" class="bet-dropdown" style="display:none;">
+            <button class="open bet-opt-btn" id="bet10">$10</button>
+            <button class="open bet-opt-btn" id="bet100">$100</button>
+            <button class="open bet-opt-btn" id="bet1000">$1,000</button>
+            <button class="open bet-opt-btn" id="betAll">ALL IN 🔥</button>
+        </div>
+
+        <!-- Win Flash Overlay -->
+        <div id="winFlash" class="win-flash" style="display:none;"></div>
+
+        <!-- Jackpot Banner -->
+        <div id="jackpotBanner" class="jackpot-banner" style="display:none;">
+            🎰 JACKPOT! 🎰
+        </div>
+
+        <!-- Theme Manager Panel -->
+        <div id="themeManager" class="theme-panel" style="display:none;">
+            <h2 class="theme-panel-title">Theme</h2>
+            <button class="open theme-opt-btn" id="themePurple">💜 Purple</button>
+            <button class="open theme-opt-btn" id="themeBlue">💙 Blue</button>
+            <button class="open theme-opt-btn" id="themeDark">🖤 Dark</button>
+            <button class="open theme-opt-btn" id="themeGold">💛 Gold</button>
+            <button class="open theme-opt-btn" id="closeThemeManager">✕ Close</button>
+        </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!--  LOSE SCREEN (overlay)                                       -->
+    <!-- ============================================================ -->
+    <div id="loseScreen" class="lose-overlay" style="display:none;">
+        <div class="lose-card">
+            <div class="lose-icon">💸</div>
+            <h1 class="lose-title">You're Broke!</h1>
+            <p class="lose-sub">Out of money and in debt.<br>Better luck next time.</p>
+            <button class="open lose-btn" id="loseRestartButton">🔄 Play Again</button>
+            <button class="open lose-btn lose-btn-secondary" id="loseQuitButton">🏠 Main Menu</button>
+        </div>
     </div>
 
 </body>

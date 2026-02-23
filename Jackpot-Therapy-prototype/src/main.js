@@ -1,724 +1,642 @@
-// Title screen elements
-let startButton = document.getElementById('startButton');
-let titleText = document.getElementById('titleText');
-let welcomeSign = document.getElementById('welcomeSign');
-let slotMachineTitle = document.getElementById('slotMachineTitle');
-let subtitle = document.querySelector('.subtitle');
-let titleScreenContainer = document.querySelector('.title-screen-container');
+/* ============================================================
+   JACKPOT THERAPY — main.js
+   Fully rebuilt: screen-based navigation, all game logic,
+   win effects, jackpot banner, lose screen restart, theme fix.
+   ============================================================ */
 
-// Profile screen elements
-let createNewProfile = document.getElementById('createNewProfile');
-let profileText = document.getElementById('profileText');
-let selectButton = document.getElementById('selectButton');
-let selectLeftButton = document.getElementById('selectLeftButton');
-let selectRightButton = document.getElementById('selectRightButton');
-// avatarSelectMid appears in main and profile screens
-let avatarSelectMid = document.getElementById('avatarSelectMid');
-let avatarSelectLeft = document.getElementById('avatarSelectLeft');
-let avatarSelectRight = document.getElementById('avatarSelectRight');
+// ── Audio ──────────────────────────────────────────────────────
+const music       = document.getElementById('music');
+const clickSound  = document.getElementById('clickSound');
+const spinSound   = document.getElementById('spinSound');
+const jackpotSound= document.getElementById('jackpotSound');
 
-// Main screen elements
-let profileNameElement = document.getElementById('profileName');
-let balanceElement = document.getElementById('balance');
-let slot1 = document.getElementById('slot1');
-let slot2 = document.getElementById('slot2');
-let slot3 = document.getElementById('slot3');
-let spinButton = document.getElementById('spinButton');
-let loanButton = document.getElementById('loanButton');
-let betButton = document.getElementById('betButton');
-let betAmount = document.getElementById('betAmount');
-let amountOptions = document.getElementById('amountOptions');
-let bet10 = document.getElementById('bet10');
-let bet100 = document.getElementById('bet100');
-let bet1000 = document.getElementById('bet1000');
-let betAll = document.getElementById('betAll');
-let spinSound = document.getElementById("spinSound")
-let jackpotSound = document.getElementById("jackpotSound")
-let debtElement = document.getElementById('debtElement');
-let debtNum = document.getElementById('debtNum');
-let loseScreen = document.getElementById('loseScreen');
-// Elements that appear in every screen
-let music = document.getElementById('music');
-let background = document.getElementById('background');
-let clickSound = document.getElementById('clickSound');
-let backOrQuitButton = document.getElementById('backOrQuitButton');
+// ── Screens ────────────────────────────────────────────────────
+const screenTitle         = document.getElementById('screen-title');
+const screenProfileSelect = document.getElementById('screen-profile-select');
+const screenAvatarSelect  = document.getElementById('screen-avatar-select');
+const screenNameEntry     = document.getElementById('screen-name-entry');
+const screenMain          = document.getElementById('screen-main');
 
-// variables
-let profilePic = 1;
-let profileName = "";
-let currentScreen = "title";
-// this is where all profiles will be stored, using key value pairs for each profile for the name, avatar, and balance
-let profileMatrix = [{name: "Default", avatar: 1, balance: 1000}];
-let slotArray = [1,1,1];
-let spinningCheck = [false];
+// ── Universal ──────────────────────────────────────────────────
+const background        = document.getElementById('background');
+const backOrQuitButton  = document.getElementById('backOrQuitButton');
+
+// ── Title screen ───────────────────────────────────────────────
+const startButton       = document.getElementById('startButton');
+
+// ── Profile select ─────────────────────────────────────────────
+const profileGrid       = document.getElementById('profileGrid');
+const profileText       = document.getElementById('profileText');
+const selectButton      = document.getElementById('selectButton');
+const createNewProfile  = document.getElementById('createNewProfile');
+
+// ── Avatar select ──────────────────────────────────────────────
+const avatarSelectMid   = document.getElementById('avatarSelectMid');
+const avatarSelectLeft  = document.getElementById('avatarSelectLeft');
+const avatarSelectRight = document.getElementById('avatarSelectRight');
+const selectLeftButton  = document.getElementById('selectLeftButton');
+const selectRightButton = document.getElementById('selectRightButton');
+const confirmAvatarBtn  = document.getElementById('confirmAvatarButton');
+
+// ── Name entry ─────────────────────────────────────────────────
+const nameInput         = document.getElementById('nameInput');
+const confirmNameBtn    = document.getElementById('confirmNameButton');
+
+// ── HUD ────────────────────────────────────────────────────────
+const hudAvatar         = document.getElementById('hudAvatar');
+const profileNameEl     = document.getElementById('profileName');
+const balanceEl         = document.getElementById('balance');
+const debtElement       = document.getElementById('debtElement');
+const debtNumEl         = document.getElementById('debtNum');
+
+// ── Slot reels ─────────────────────────────────────────────────
+const slot1             = document.getElementById('slot1');
+const slot2             = document.getElementById('slot2');
+const slot3             = document.getElementById('slot3');
+const reel1             = document.getElementById('reel1');
+const reel2             = document.getElementById('reel2');
+const reel3             = document.getElementById('reel3');
+
+// ── Game controls ──────────────────────────────────────────────
+const spinButton        = document.getElementById('spinButton');
+const betButton         = document.getElementById('betButton');
+const betAmountEl       = document.getElementById('betAmount');
+const loanButton        = document.getElementById('loanButton');
+const amountOptions     = document.getElementById('amountOptions');
+const bet10             = document.getElementById('bet10');
+const bet100            = document.getElementById('bet100');
+const bet1000           = document.getElementById('bet1000');
+const betAll            = document.getElementById('betAll');
+
+// ── Effects ────────────────────────────────────────────────────
+const winFlash          = document.getElementById('winFlash');
+const jackpotBanner     = document.getElementById('jackpotBanner');
+
+// ── Lose screen ────────────────────────────────────────────────
+const loseScreen        = document.getElementById('loseScreen');
+const loseRestartButton = document.getElementById('loseRestartButton');
+const loseQuitButton    = document.getElementById('loseQuitButton');
+
+// ── Theme ──────────────────────────────────────────────────────
+const themeButton       = document.getElementById('themeButton');
+const themeManager      = document.getElementById('themeManager');
+const themePurple       = document.getElementById('themePurple');
+const themeBlue         = document.getElementById('themeBlue');
+const themeDark         = document.getElementById('themeDark');
+const themeGold         = document.getElementById('themeGold');
+const closeThemeManager = document.getElementById('closeThemeManager');
+
+// ── Game State ─────────────────────────────────────────────────
+let currentScreen    = 'title';
+let profilePic       = 1;
+let profileName      = '';
+let balance          = 1000;
+let currentBet       = 100;
+let debt             = 0;
+let slotArray        = [1, 1, 1];
+let isSpinning       = false;
 let brokeCheckInterval = null;
-//change these variable to be assigned to the selected profile when loading a profile
-let balance = 1000;
-let name = "Default";
-let avatar = 1;
-balanceElement.innerHTML = "Balance: $" + balance;
-// for the profile selection screen, 0 is the create new profile option, 1+ are the saved profiles, 
-// starts at -1 since no profile is selected
-let selectedProfileTemp = 0;
 
+// profileMatrix: [{name, avatar, balance}]
+let profileMatrix    = [];
+let selectedProfileIndex = -1; // -1 = nothing, 0 = createNew, 1+ = saved profile
 
+// ── Helpers ────────────────────────────────────────────────────
 
-
-
-// onload function to set music controls to true then false to get music to start playing
-
-document.onload = function() {
-    // The music doesnt start without this for some reason
-    music.controls = true;
-    music.controls = false;
-    music.play();
+function showScreen(id) {
+    [screenTitle, screenProfileSelect, screenAvatarSelect, screenNameEntry, screenMain]
+        .forEach(s => s.style.display = 'none');
+    document.getElementById(id).style.display = 'flex';
 }
 
-
-
-startButton.onmousedown = function() {
-    buttonClick(startButton, profileScreen);
-    if (music.paused) {
-        music.play();
-    }
-};
-
-selectButton.onmousedown = function() {
-    buttonClick(selectButton, function() {
-        if (currentScreen == "profile-name") {
-            profileName = profileText.innerHTML;
-            profileNameElement.innerHTML = profileName;
-            mainScreen();
-        } else if (currentScreen == "profile-character") {
-            avatarSelectLeft.style.display = 'none';
-            avatarSelectRight.style.display = 'none';
-            selectLeftButton.style.display = 'none';
-            selectRightButton.style.display = 'none';
-            console.log("Character Selected: " + profilePic)
-            profileText.innerHTML = "Enter Name";
-            currentScreen = "profile-name";
-            profileText.setAttribute('style', 'display: block;width: 600px;height: 20px;margin-left: 560px;margin-bottom: 100px;');
-            profileText.focus();
-            profileText.style.textBoxTrimming = 'none';
-            profileText.contentEditable = 'true';
-        } else if (currentScreen == "profile-select") {
-            if (selectedProfileTemp == 0) {
-                // create new profile
-                profileScreen();
-            } else if (selectedProfileTemp > 0) {
-                // load selected profile
-                let selectedProfile = profileMatrix[selectedProfileTemp -1];
-                profileName = selectedProfile.name;
-                profilePic = selectedProfile.avatar;
-                let balance = selectedProfile.balance;
-                profileNameElement.innerHTML = profileName;
-                balanceElement.innerHTML = "Balance: $" + balance;
-                avatarSelectMid.setAttribute('src', '../images/Avatars/' + profilePic + '.png');
-                mainScreen();
-            }
-        }
-    });
-};
-
-selectLeftButton.onmousedown = function() {
-    buttonClick(selectLeftButton, function() {
-        if (profilePic == 1) {
-            avatarSelectLeft.setAttribute('src', '../images/Avatars/9.png');
-            avatarSelectMid.setAttribute('src', '../images/Avatars/10.png');
-            avatarSelectRight.setAttribute('src', '../images/Avatars/1.png');
-            profilePic = 10;
-        } else if (profilePic == 2) {
-            avatarSelectLeft.setAttribute('src', '../images/Avatars/10.png');
-            avatarSelectMid.setAttribute('src', '../images/Avatars/1.png');
-            avatarSelectRight.setAttribute('src', '../images/Avatars/2.png');
-            profilePic = 1;
-        } else if (profilePic == 10) {
-            avatarSelectLeft.setAttribute('src', '../images/Avatars/8.png');
-            avatarSelectMid.setAttribute('src', '../images/Avatars/9.png');
-            avatarSelectRight.setAttribute('src', '../images/Avatars/10.png');
-            profilePic = 9;
-        } else {
-            let newPic = profilePic - 1;
-            avatarSelectLeft.setAttribute('src', '../images/Avatars/' + (newPic - 1) + '.png');
-            avatarSelectMid.setAttribute('src', '../images/Avatars/' + newPic + '.png');
-            avatarSelectRight.setAttribute('src', '../images/Avatars/' + (newPic + 1) + '.png');
-            profilePic = newPic;
-        }
-    });
-};
-
-selectRightButton.onmousedown = function() {
-    buttonClick(selectRightButton, function() {
-        if (profilePic == 9) {
-            avatarSelectLeft.setAttribute('src', '../images/Avatars/9.png');
-            avatarSelectMid.setAttribute('src', '../images/Avatars/10.png');
-            avatarSelectRight.setAttribute('src', '../images/Avatars/1.png');
-            profilePic = 10;
-        } else if (profilePic == 10) {
-            avatarSelectLeft.setAttribute('src', '../images/Avatars/10.png');
-            avatarSelectMid.setAttribute('src', '../images/Avatars/1.png');
-            avatarSelectRight.setAttribute('src', '../images/Avatars/2.png');
-            profilePic = 1;
-        } else if (profilePic == 1) {
-            avatarSelectLeft.setAttribute('src', '../images/Avatars/1.png');
-            avatarSelectMid.setAttribute('src', '../images/Avatars/2.png');
-            avatarSelectRight.setAttribute('src', '../images/Avatars/3.png');
-            profilePic = 2;
-        } else {
-            let newPic = profilePic + 1;
-            avatarSelectLeft.setAttribute('src', '../images/Avatars/' + (newPic - 1) + '.png');
-            avatarSelectMid.setAttribute('src', '../images/Avatars/' + newPic + '.png');
-            avatarSelectRight.setAttribute('src', '../images/Avatars/' + (newPic + 1) + '.png');
-            profilePic = newPic;
-        }
-    });
-};
-
-loanButton.onmousedown = function() {
-    buttonClick(loanButton, function() {
-        if (loanButton.innerHTML == "Pay Back") {
-            console.log("Loan Payback Clicked");
-            balance -= parseInt(debtNum.innerHTML);
-            debtNum.innerHTML = 0;
-            loanButton.innerHTML = "Loan";
-            loanButton.style.top = "93%";
-            loanButton.style.left = "93%";
-            loanButton.style.width = "150px";
-            debtElement.style.left = "88%";
-            balanceElement.innerHTML = "Balance: $" + balance;
-            return;
-        } else {
-            loanButton.style.left = "90%";
-            loanButton.style.width = "300px";
-            debtElement.style.left = "85%";
-            console.log("Loan Button Clicked");
-            balance += 500;
-            debtNum.innerHTML = parseInt(debtNum.innerHTML) + 750;
-            loanButton.innerHTML = "Pay Back";
-            balanceElement.innerHTML = "Balance: $" + balance;
-            if (balance < debtNum.innerHTML) { 
-                loanButton.style.display = 'none';
-            }
-        }
-        if (balance < betAmount.innerHTML) {
-            spinButton.style.display = 'none';
-            spinButton.setAttribute('class', 'open');
-            spinButton.setAttribute('class', 'disabled');
-        } else {
-            spinButton.style.display = 'block';
-            spinButton.setAttribute('class', 'open');
-        }
-    });
+function setBackground(src) {
+    background.style.opacity = '0';
+    setTimeout(() => {
+        background.setAttribute('src', src);
+        background.style.opacity = '1';
+    }, 200);
 }
 
-createNewProfile.onmousedown = function() {
-    // I don't use the buttonClick function for profile select elements because they 
-    // should not be assigned to the open and closed classes, those are for buttons only
-    // profile classes are img elements
-    clickSound.src = '../sounds/click.mp3';
-    clickSound.currentTime = 0;
-    clickSound.play();
-    createNewProfile.onmouseup = function() {
-        clickSound.src = '../sounds/unclick.mp3';
-        clickSound.currentTime = 0;
-        clickSound.play();
-        createNewProfile.setAttribute('class', 'profileIconSelected');
-        selectedProfileTemp = 0;
-        selectButton.style.display = 'block';
-    };
-};
-
-backOrQuitButton.onmousedown = function() {
-    buttonClick(backOrQuitButton, function() {
-        if (currentScreen == "title") {
-            // quit game
-            console.log("Quit Game");
-            window.close();
-        } else {
-            resetGame();
-            loanButton.innerHTML = "Loan";
-            loanButton.style.top = "93%";
-            loanButton.style.left = "93%";
-            loanButton.style.width = "150px";
-            debtElement.style.left = "88%";
-            backOrQuitButton.style.left = "7%";
-            backOrQuitButton.innerHTML = "Quit";
-            // go back to title screen
-            console.log("Back to Title Screen");
-            // reset all elements to title screen
-            createNewProfile.style.display = 'none';
-            amountOptions.style.display = 'none';
-            debtElement.style.display = 'none';
-            profileText.style.display = 'none';
-            selectLeftButton.style.display = 'none';
-            selectRightButton.style.display = 'none';
-            avatarSelectLeft.style.display = 'none';
-            avatarSelectMid.style.display = 'none';
-            avatarSelectRight.style.display = 'none';
-            selectButton.style.display = 'none';
-            profileNameElement.style.display = 'none';
-            balanceElement.style.display = 'none';
-            slot1.style.display = 'none';
-            slot2.style.display = 'none';
-            slot3.style.display = 'none';
-            spinButton.style.display = 'none';
-            loanButton.style.display = 'none';
-            betButton.style.display = 'none';
-            // Show title screen elements
-            titleScreenContainer.style.display = 'flex';
-            startButton.style.display = 'block';
-            titleText.style.display = 'block';
-            welcomeSign.style.display = 'block';
-            slotMachineTitle.style.display = 'block';
-            subtitle.style.display = 'block';
-            background.setAttribute('src', '../images/TitleScreen.jpg');
-            currentScreen = "title";
-            profileText.contentEditable = 'false';
-        }
-        if (currentScreen != "main") {
-        if (spinSound.paused == false) {
-            spinSound.pause();
-            return;
-        }
-        return;
-    }
-    });
+function formatMoney(n) {
+    return '$' + Number(n).toLocaleString();
 }
 
-betButton.onmousedown = function() {
-    buttonClick(betButton, function() {
-        let bet = betAmount.innerHTML;
-        if (amountOptions.style.display == 'none') {
-            amountOptions.style.display = 'block';
-            betButton.innerHTML = '↑  Bet: <strong>$</strong><strong id="betAmount">' + bet + '</strong>  ↑'
-        } else {
-            amountOptions.style.display = 'none';
-            betButton.innerHTML = '↓  Bet: <strong>$</strong><strong id="betAmount">' + bet + '</strong>  ↓'
-        }
-    });
+function updateBalanceDisplay() {
+    balanceEl.textContent = formatMoney(balance);
+    balanceEl.classList.remove('balance-pop');
+    void balanceEl.offsetWidth; // reflow to restart animation
+    balanceEl.classList.add('balance-pop');
+    balanceEl.classList.toggle('losing', balance < 200);
 }
 
-bet10.onmousedown = function() {
-    buttonClick(bet10, function() {
-        betAmount.innerHTML = '10';
-        amountOptions.style.display = 'none';
-        betButton.innerHTML = '↓  Bet: <strong>$</strong><strong id="betAmount">10</strong>  ↓'
-    });
-    if (balance < 10) {
-        spinButton.style.display = 'none';
-        spinButton.setAttribute('class', 'open');
-        spinButton.setAttribute('class', 'disabled');
+function updateDebtDisplay() {
+    debtNumEl.textContent = debt;
+    debtElement.style.display = debt > 0 ? 'block' : 'none';
+}
+
+function updateSpinButtonState() {
+    const bet = currentBet === 'ALL IN' ? balance : currentBet;
+    if (balance > 0 && balance >= bet && !isSpinning) {
+        spinButton.className = 'open spin-btn';
+        spinButton.disabled = false;
     } else {
-        spinButton.style.display = 'block';
-        spinButton.setAttribute('class', 'open');
+        spinButton.className = 'disabled spin-btn';
+        spinButton.disabled = true;
     }
 }
 
-bet100.onmousedown = function() {
-    buttonClick(bet100, function() {
-        betAmount.innerHTML = '100';
-        amountOptions.style.display = 'none';
-        betButton.innerHTML = '↓  Bet: <strong>$</strong><strong id="betAmount">100</strong>  ↓'
-    });
-    if (balance < 100) {
-        spinButton.style.display = 'none';
-        spinButton.setAttribute('class', 'open');
-        spinButton.setAttribute('class', 'disabled');
+function updateLoanButtonState() {
+    if (debt > 0 && balance >= debt) {
+        loanButton.style.display = '';
+        loanButton.textContent = 'Pay Back';
+        loanButton.className = 'open loan-btn';
+    } else if (debt === 0) {
+        loanButton.style.display = '';
+        loanButton.textContent = 'Loan';
+        loanButton.className = 'open loan-btn';
     } else {
-        spinButton.style.display = 'block';
-        spinButton.setAttribute('class', 'open');
-    }
-}
-
-bet1000.onmousedown = function() {
-    buttonClick(bet1000, function() {
-        betAmount.innerHTML = '1000';
-        amountOptions.style.display = 'none';
-        betButton.innerHTML = '↓  Bet: <strong>$</strong><strong id="betAmount">1000</strong>  ↓'
-    });
-    if (balance < 1000) {
-        spinButton.style.display = 'none';
-        spinButton.setAttribute('class', 'open');
-        spinButton.setAttribute('class', 'disabled');
-    } else {
-        spinButton.style.display = 'block';
-        spinButton.setAttribute('class', 'open');
-    }
-}
-
-betAll.onmousedown = function() {
-    buttonClick(betAll, function() {
-        betAmount.innerHTML = 'ALL IN';
-        amountOptions.style.display = 'none';
-        betButton.innerHTML = '↓  Bet: <strong>$</strong><strong id="betAmount">ALL IN</strong>  ↓'
-    });
-    if (balance <= 0) {
-        spinButton.style.display = 'none';
-        spinButton.setAttribute('class', 'open');
-        spinButton.setAttribute('class', 'disabled');
-    } else {
-        spinButton.style.display = 'block';
-        spinButton.setAttribute('class', 'open');
-    }
-}
-
-// this has all the logic for the spinning of the slots and winning/losing
-spinButton.onmousedown = function() {
-    buttonClick(spinButton, function() {
-        let bet = betAmount.innerHTML;
-        if (bet == 'ALL IN') {
-            bet = balance;
-        }
-        if (balance < debtNum.innerHTML) { 
-            loanButton.style.display = 'none';
-        }
-        balance -= parseInt(bet);
-        balanceElement.innerHTML = "Balance: $" + balance;
-        console.log("Spin Button Clicked");
-        spinSound.currentTime = 0;
-        spinSound.play();
-        spinButton.setAttribute('class', 'disabled');
-        spinButton.style.display = 'none';
-        brokeCheckInterval = clearInterval(brokeCheckInterval);
-        spinningCheck[0] = true;
-        betButton.style.display = 'none';
-        backOrQuitButton.style.display = 'none';
         loanButton.style.display = 'none';
-        // while loop to simulate spinning slots
-        while (true) {
-            let spinInterval = setInterval(function() {
-                slotArray[0] = Math.floor(Math.random() * 10) + 1;
-                slotArray[1] = Math.floor(Math.random() * 10) + 1;
-                slotArray[2] = Math.floor(Math.random() * 10) + 1;
-                slot1.setAttribute('src', '../images/Icons/' + slotArray[0] + '.png');
-                slot2.setAttribute('src', '../images/Icons/' + slotArray[1] + '.png');
-                slot3.setAttribute('src', '../images/Icons/' + slotArray[2] + '.png');
-            }, 100);
-            // break condition to stop spinning after 3 seconds
-            setTimeout(function() {
-                if (currentScreen == "main") {
-                    betButton.style.display = 'block';
-                    backOrQuitButton.style.display = 'block';
-                    if (balance > 0 && balance >= bet) {
-                        spinButton.setAttribute('class', 'open');
-                        spinButton.style.display = 'block';
-                    } else {
-                        spinButton.setAttribute('class', 'disabled');
-                        spinButton.style.display = 'none';
-                    }
-                    if (balance < debtNum.innerHTML) { 
-                        loanButton.style.display = 'none';
-                        loanButton.setAttribute('class', 'disabled');
-                    } else {
-                        loanButton.style.display = 'block';
-                        loanButton.setAttribute('class', 'open');
-                        loanButton.disabled = false;
-                    }
-                    spinButton.setAttribute('class', 'open');
-                    spinInterval = clearInterval(spinInterval);
-                    if (slotArray[0] == slotArray[1] && slotArray[1] == slotArray[2]) {
-                        console.log("Jackpot! Three of a kind: ");
-                        jackpotSound.currentTime = 0;
-                        jackpotSound.play();
-                        // right now the user wins 10x their bet for hitting the jackpot
-                        balance += parseInt(bet) * 10;
-                        balanceElement.innerHTML = "Balance: $" + balance;
-                    } else if (slotArray[0] == slotArray[1] || slotArray[1] == slotArray[2] || slotArray[0] == slotArray[2]) {
-                        // user wins 2x their bet for two of a kind
-                        console.log("Two of a kind!");
-                        jackpotSound.currentTime = 0;
-                        jackpotSound.play();
-                        balance += parseInt(bet) * 2;
-                        balanceElement.innerHTML = "Balance: $" + balance;
-                    } else {
-                        console.log("No match.");
-                    }
-                    
-                    let brokeCheckInterval = setInterval(brokeCheck, 10);
-                } else {
-                    spinSound.pause();
-                    spinInterval = clearInterval(spinInterval);
-                }
-            }, 4000);
-            spinningCheck[0] = false;
-            break; 
-        }
-    });
-}
-
-function resetGame() {
-    // reset all elements to title screen
-        themeButton.style.display = "none";
-        themeManager.style.display = "none";
-        createNewProfile.style.display = 'none';
-        amountOptions.style.display = 'none';
-        debtElement.style.display = 'none';
-        profileText.style.display = 'none';
-        selectLeftButton.style.display = 'none';
-        selectRightButton.style.display = 'none';
-        avatarSelectLeft.style.display = 'none';
-        avatarSelectMid.style.display = 'none';
-        avatarSelectRight.style.display = 'none';
-        selectButton.style.display = 'none';
-        profileNameElement.style.display = 'none';
-        balanceElement.style.display = 'none';
-        slot1.style.display = 'none';
-        slot2.style.display = 'none';
-        slot3.style.display = 'none';
-        spinButton.style.display = 'none';
-        loanButton.style.display = 'none';
-        betButton.style.display = 'none';
-        // Show title screen elements
-        titleScreenContainer.style.display = 'flex';
-        startButton.style.display = 'block';
-        titleText.style.display = 'block';
-        welcomeSign.style.display = 'block';
-        slotMachineTitle.style.display = 'block';
-        subtitle.style.display = 'block';
-        background.setAttribute('src', '../images/TitleScreen.jpg');
-        currentScreen = "title";
-        balance = 1000;
-        loanButton.innerHTML = "Loan";
-        loanButton.style.top = "93%";
-        loanButton.style.left = "93%";
-        loanButton.style.width = "150px";
-        debtElement.style.left = "88%";
-        backOrQuitButton.style.left = "7%";
-        backOrQuitButton.innerHTML = "Quit";
-        profileText.contentEditable = 'false';
-        loanButton.disabled = false;
-        balanceElement.innerHTML = "Balance: $" + balance;
-        debtNum.innerHTML = 0;
-        loseScreen.style.display = 'none';
-        music.play();
-}
-
-loseScreen.onmousedown = function() {
-        // go back to title screen with 1000 balance
-        console.log("Back to Title Screen from Lose Screen");
-        resetGame();
-}
-
-// this is a big ass function of general things that get checked every 10th of a second
-// in an interval called brokeCheckInterval. This also runs at the end of every spin.
-
-// spinningCheck is a variable that I use to check whether the slots are currently spinning so that 
-// broke check is not run during the spin, that can cause issues like the game over screen appearing after 
-// an ALL IN bet.
-function brokeCheck() {
-    if (currentScreen != "main") {
-        if (spinSound.paused == false) {
-            spinSound.pause();
-            return;
-        }
-        return;
-    }
-    if (spinningCheck[0]) {
-        return;
-    } else {
-        if (spinSound.paused == true) {
-            console.log("Broke check running.");
-            if (balance < betAmount.innerHTML) {
-                spinButton.style.display = 'none';
-                spinButton.setAttribute('class', 'open');
-                spinButton.setAttribute('class', 'disabled');
-            } else {
-                spinButton.style.display = 'block';
-                spinButton.setAttribute('class', 'open');
-            }
-            if (balance <= 0) {
-                spinButton.setAttribute('class', 'disabled');
-                spinButton.style.display = 'none';
-                if (debtNum.innerHTML > 0) {
-                    // show lose screen
-                    console.log("User has lost the game.");
-                    loseScreen.style.display = 'block';
-                    balance = 0;
-                    balanceElement.innerHTML = "Balance: $" + balance;
-                    music.pause();
-
-                }
-            } else {
-                loseScreen.style.display = 'none';
-                spinButton.setAttribute('class', 'open');
-            }
-            if (debtNum.innerHTML <= balance) {
-                loanButton.disabled = false;
-                loanButton.style.display = 'block';
-                loanButton.setAttribute('class', 'open');
-            } else {
-                loanButton.disabled = true;
-                loanButton.style.display = 'none';
-                loanButton.setAttribute('class', 'disabled');
-            }
-        }
     }
 }
 
-
-// function for button clicking, does the clicking animation, plays the click sound, and when you 
-// release the mouse it does the specified action. button parameter is the button element. action parameter 
-// is the function to call on mouseup.
-// Call this function in a mousedown event for a button. dont need a mouseup event since its handled here.
+// ── Button click helper (press/release animation + sound) ──────
 function buttonClick(button, action) {
-    button.setAttribute('class', 'closed');
-    clickSound.src = '../sounds/click.mp3';
-    clickSound.currentTime = 0;
-    clickSound.play();
-    button.onmouseup = function() {
-        button.setAttribute('class', 'open');
-        clickSound.src = '../sounds/unclick.mp3';
-        clickSound.currentTime = 0;
-        clickSound.play();
+    button.classList.add('closed');
+    button.classList.remove('open');
+    playSfx(clickSound, '../sounds/click.mp3');
+    
+    const onUp = () => {
+        button.classList.remove('closed');
+        button.classList.add('open');
+        playSfx(clickSound, '../sounds/unclick.mp3');
         action();
+        document.removeEventListener('mouseup', onUp);
     };
+    document.addEventListener('mouseup', onUp);
 }
- 
-function profileScreen() {
-    backOrQuitButton.innerHTML = "Back";
-    console.log("Profile Screen Opened");
-    selectButton.style.display = 'block';
-    if (currentScreen == "title" || currentScreen == 'main') {
-        // Remove objects from title screen and main screen and goes to the profile select screen
-        profileText.innerHTML = "Select Profile";
-        selectButton.style.display = 'none';
-        // Hide title screen elements
-        titleScreenContainer.style.display = 'none';
-        startButton.style.display = 'none';
-        titleText.style.display = 'none';
-        welcomeSign.style.display = 'none';
-        slotMachineTitle.style.display = 'none';
-        subtitle.style.display = 'none';
-        // Show profile elements
-        createNewProfile.style.display = 'block';
-        profileText.style.display = 'block';
-        profileNameElement.style.display = 'none';
-        balanceElement.style.display = 'none';
-        slot1.style.display = 'none';
-        slot2.style.display = 'none';
-        slot3.style.display = 'none';
-        spinButton.style.display = 'none';
-        loanButton.style.display = 'none';
-        betButton.style.display = 'none';
-        currentScreen = "profile-select"
 
-        // TODO: make a function that iterates through all of the profiles and either checks if they are in the 
-        // profileIconSelected class or makes it so they are all not in that class
+function playSfx(audioEl, src) {
+    audioEl.src = src;
+    audioEl.currentTime = 0;
+    audioEl.play().catch(() => {});
+}
 
-        // I want to implament that function here in the future so that it resets all the profile icons everytime you go to the 
-        // profile select page
-        // for now I have manually set the createNewProfile to be 
-        // unselected when going to profile select screen
-        createNewProfile.setAttribute('class', 'avatar2');
-    } else if (currentScreen == "profile-select") {
-        avatarSelectMid.setAttribute('class', 'avatar1')
-        // removes objects from profile select screen and goes to avatar select screen
-        createNewProfile.style.display = 'none';
-        profileText.style.display = 'block';
-        selectLeftButton.style.display = 'block';
-        selectRightButton.style.display = 'block';
-        avatarSelectLeft.style.display = 'block';
-        avatarSelectMid.style.display = 'block';
-        avatarSelectRight.style.display = 'block';
-        profileText.innerHTML = "Select an Avatar";
-        currentScreen = "profile-character";
+// ── Music ──────────────────────────────────────────────────────
+function startMusic() {
+    if (music.paused) {
+        music.volume = 0.45;
+        music.play().catch(() => {});
+    }
+}
+
+// ============================================================
+//  NAVIGATION
+// ============================================================
+
+// Title → Profile Select
+startButton.onmousedown = function () {
+    buttonClick(startButton, () => {
+        startMusic();
+        goToProfileSelect();
+    });
+};
+
+function goToProfileSelect() {
+    currentScreen = 'profile-select';
+    selectedProfileIndex = -1;
+    selectButton.style.display = 'none';
+    backOrQuitButton.textContent = 'Back';
+    setBackground('../images/ProfileScreen.jpg');
+    rebuildProfileGrid();
+    showScreen('screen-profile-select');
+}
+
+function rebuildProfileGrid() {
+    // Clear existing saved cards (keep createNew)
+    Array.from(profileGrid.querySelectorAll('.saved-profile-card')).forEach(c => c.remove());
+
+    profileMatrix.forEach((p, i) => {
+        const card = document.createElement('div');
+        card.className = 'profile-card saved-profile-card';
+        card.dataset.index = i + 1;
+        card.innerHTML = `
+            <img src="../images/Avatars/${p.avatar}.png" alt="${p.name}">
+            <span>${p.name}</span>
+        `;
+        card.onmousedown = () => {
+            clickSound.src = '../sounds/click.mp3';
+            clickSound.currentTime = 0;
+            clickSound.play().catch(()=>{});
+            document.querySelectorAll('.profile-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedProfileIndex = i + 1;
+            selectButton.style.display = '';
+        };
+        profileGrid.appendChild(card);
+    });
+}
+
+// Profile card — createNew
+createNewProfile.onmousedown = function () {
+    playSfx(clickSound, '../sounds/click.mp3');
+    document.querySelectorAll('.profile-card').forEach(c => c.classList.remove('selected'));
+    createNewProfile.classList.add('selected');
+    selectedProfileIndex = 0;
+    selectButton.style.display = '';
+    const onUp = () => { playSfx(clickSound, '../sounds/unclick.mp3'); document.removeEventListener('mouseup', onUp); };
+    document.addEventListener('mouseup', onUp);
+};
+
+// Profile select → Avatar select (new profile) OR main (existing)
+selectButton.onmousedown = function () {
+    buttonClick(selectButton, () => {
+        if (selectedProfileIndex === 0) {
+            // New profile: go to avatar select
+            goToAvatarSelect();
+        } else if (selectedProfileIndex > 0) {
+            // Load saved profile
+            const p = profileMatrix[selectedProfileIndex - 1];
+            profileName = p.name;
+            profilePic  = p.avatar;
+            balance     = p.balance;
+            debt        = p.debt || 0;
+            goToMainScreen();
+        }
+    });
+};
+
+// Avatar Select
+function goToAvatarSelect() {
+    currentScreen = 'profile-avatar';
+    profilePic = 1;
+    updateAvatarCarousel();
+    backOrQuitButton.textContent = 'Back';
+    showScreen('screen-avatar-select');
+}
+
+function updateAvatarCarousel() {
+    const total = 10;
+    const left  = profilePic === 1 ? total : profilePic - 1;
+    const right = profilePic === total ? 1 : profilePic + 1;
+    avatarSelectLeft.src  = `../images/Avatars/${left}.png`;
+    avatarSelectMid.src   = `../images/Avatars/${profilePic}.png`;
+    avatarSelectRight.src = `../images/Avatars/${right}.png`;
+}
+
+selectLeftButton.onmousedown = function () {
+    buttonClick(selectLeftButton, () => {
+        profilePic = profilePic === 1 ? 10 : profilePic - 1;
+        updateAvatarCarousel();
+    });
+};
+
+selectRightButton.onmousedown = function () {
+    buttonClick(selectRightButton, () => {
+        profilePic = profilePic === 10 ? 1 : profilePic + 1;
+        updateAvatarCarousel();
+    });
+};
+
+confirmAvatarBtn.onmousedown = function () {
+    buttonClick(confirmAvatarBtn, () => {
+        goToNameEntry();
+    });
+};
+
+// Name Entry
+function goToNameEntry() {
+    currentScreen = 'profile-name';
+    nameInput.value = '';
+    backOrQuitButton.textContent = 'Back';
+    showScreen('screen-name-entry');
+    setTimeout(() => nameInput.focus(), 100);
+}
+
+confirmNameBtn.onmousedown = function () {
+    buttonClick(confirmNameBtn, () => {
+        const enteredName = nameInput.value.trim();
+        if (!enteredName) {
+            nameInput.style.borderColor = '#f00';
+            nameInput.style.boxShadow = '0 0 20px #f00';
+            setTimeout(() => {
+                nameInput.style.borderColor = '';
+                nameInput.style.boxShadow = '';
+            }, 800);
+            return;
+        }
+        profileName = enteredName;
+        balance = 1000;
+        debt = 0;
+        // Save new profile
+        profileMatrix.push({ name: profileName, avatar: profilePic, balance: 1000, debt: 0 });
+        goToMainScreen();
+    });
+};
+
+nameInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') confirmNameBtn.onmousedown && confirmNameBtn.dispatchEvent(new MouseEvent('mousedown'));
+});
+
+// Main Screen
+function goToMainScreen() {
+    currentScreen = 'main';
+    backOrQuitButton.textContent = 'Save & Quit';
+    setBackground('../images/MainScreen.jpg');
+
+    // Update HUD
+    profileNameEl.textContent = profileName;
+    hudAvatar.src = `../images/Avatars/${profilePic}.png`;
+    updateBalanceDisplay();
+    updateDebtDisplay();
+    updateSpinButtonState();
+    updateLoanButtonState();
+
+    // Reset bet
+    currentBet = 100;
+    betAmountEl.textContent = '100';
+    betButton.innerHTML = '↓ Bet: $<strong id="betAmount">100</strong> ↓';
+
+    amountOptions.style.display = 'none';
+    themeManager.style.display = 'none';
+    loseScreen.style.display = 'none';
+
+    showScreen('screen-main');
+    startBrokeCheck();
+}
+
+// ── Back / Quit ────────────────────────────────────────────────
+backOrQuitButton.onmousedown = function () {
+    buttonClick(backOrQuitButton, () => {
+        if (currentScreen === 'title') {
+            window.close();
+        } else if (currentScreen === 'main') {
+            // Save current profile state
+            const idx = profileMatrix.findIndex(p => p.name === profileName && p.avatar === profilePic);
+            if (idx >= 0) { profileMatrix[idx].balance = balance; profileMatrix[idx].debt = debt; }
+            stopBrokeCheck();
+            spinSound.pause();
+            resetToTitle();
+        } else if (currentScreen === 'profile-select') {
+            resetToTitle();
+        } else if (currentScreen === 'profile-avatar') {
+            goToProfileSelect();
+        } else if (currentScreen === 'profile-name') {
+            goToAvatarSelect();
+        }
+    });
+};
+
+function resetToTitle() {
+    currentScreen = 'title';
+    backOrQuitButton.textContent = 'Quit';
+    setBackground('../images/TitleScreen.jpg');
+    showScreen('screen-title');
+    startMusic();
+}
+
+// ============================================================
+//  BETTING
+// ============================================================
+betButton.onmousedown = function () {
+    buttonClick(betButton, () => {
+        amountOptions.style.display = amountOptions.style.display === 'none' ? '' : 'none';
+        const arrow = amountOptions.style.display === 'none' ? '↓' : '↑';
+        betButton.innerHTML = `${arrow} Bet: $<strong id="betAmount">${currentBet === 'ALL IN' ? 'ALL IN' : currentBet}</strong> ${arrow}`;
+    });
+};
+
+function selectBet(amount) {
+    currentBet = amount;
+    amountOptions.style.display = 'none';
+    const label = amount === 'ALL IN' ? 'ALL IN' : amount.toLocaleString();
+    betButton.innerHTML = `↓ Bet: $<strong id="betAmount">${label}</strong> ↓`;
+    updateSpinButtonState();
+}
+
+bet10.onmousedown   = function () { buttonClick(bet10,   () => selectBet(10));      };
+bet100.onmousedown  = function () { buttonClick(bet100,  () => selectBet(100));     };
+bet1000.onmousedown = function () { buttonClick(bet1000, () => selectBet(1000));    };
+betAll.onmousedown  = function () { buttonClick(betAll,  () => selectBet('ALL IN')); };
+
+// ============================================================
+//  LOANS
+// ============================================================
+loanButton.onmousedown = function () {
+    buttonClick(loanButton, () => {
+        if (loanButton.textContent.includes('Pay Back')) {
+            balance -= debt;
+            debt = 0;
+            updateBalanceDisplay();
+            updateDebtDisplay();
+            updateLoanButtonState();
+            updateSpinButtonState();
+        } else {
+            balance += 500;
+            debt    += 750;
+            updateBalanceDisplay();
+            updateDebtDisplay();
+            updateLoanButtonState();
+            updateSpinButtonState();
+        }
+    });
+};
+
+// ============================================================
+//  SPINNING
+// ============================================================
+spinButton.onmousedown = function () {
+    if (spinButton.classList.contains('disabled') || isSpinning) return;
+    buttonClick(spinButton, () => startSpin());
+};
+
+function startSpin() {
+    const bet = currentBet === 'ALL IN' ? balance : currentBet;
+    if (balance < bet || bet <= 0) return;
+
+    isSpinning = true;
+    balance -= bet;
+    updateBalanceDisplay();
+
+    // Lock UI
+    spinButton.className = 'disabled spin-btn';
+    spinButton.disabled = true;
+    betButton.style.display = 'none';
+    loanButton.style.display = 'none';
+    backOrQuitButton.style.display = 'none';
+    amountOptions.style.display = 'none';
+
+    // Reel spin animation
+    [reel1, reel2, reel3].forEach(r => r.classList.add('spinning'));
+
+    spinSound.currentTime = 0;
+    spinSound.play().catch(() => {});
+
+    const spinInterval = setInterval(() => {
+        slotArray[0] = Math.floor(Math.random() * 10) + 1;
+        slotArray[1] = Math.floor(Math.random() * 10) + 1;
+        slotArray[2] = Math.floor(Math.random() * 10) + 1;
+        slot1.src = `../images/Icons/${slotArray[0]}.png`;
+        slot2.src = `../images/Icons/${slotArray[1]}.png`;
+        slot3.src = `../images/Icons/${slotArray[2]}.png`;
+    }, 100);
+
+    setTimeout(() => {
+        clearInterval(spinInterval);
+        spinSound.pause();
+        [reel1, reel2, reel3].forEach(r => r.classList.remove('spinning'));
+        isSpinning = false;
+
+        // Evaluate result
+        evaluateSpin(bet);
+
+        // Restore UI
+        betButton.style.display = '';
+        backOrQuitButton.style.display = '';
+        updateLoanButtonState();
+        updateSpinButtonState();
+
+        if (balance > 0) brokeCheck();
+    }, 4000);
+}
+
+function evaluateSpin(bet) {
+    const [a, b, c] = slotArray;
+    const isJackpot  = a === b && b === c;
+    const isTwoOfKind = !isJackpot && (a === b || b === c || a === c);
+
+    if (isJackpot) {
+        balance += bet * 10;
+        showJackpotBanner('🎰 JACKPOT! 🎰');
+        showWinFlash();
+        highlightReels([reel1, reel2, reel3]);
+        jackpotSound.currentTime = 0;
+        jackpotSound.play().catch(() => {});
+    } else if (isTwoOfKind) {
+        balance += bet * 2;
+        showJackpotBanner('🎉 Two of a Kind!');
+        showWinFlash();
+        // highlight matching reels
+        const winners = [];
+        if (a === b) { winners.push(reel1, reel2); }
+        if (b === c) { winners.push(reel2, reel3); }
+        if (a === c) { winners.push(reel1, reel3); }
+        highlightReels([...new Set(winners)]);
+        jackpotSound.currentTime = 0;
+        jackpotSound.play().catch(() => {});
     }
 
-    
-
-    // change background to profile screen
-    background.setAttribute('src', '../images/ProfileScreen.jpg');
-
-    
-   
+    updateBalanceDisplay();
+    brokeCheck();
 }
 
+function showWinFlash() {
+    winFlash.style.display = 'block';
+    winFlash.style.animation = 'none';
+    void winFlash.offsetWidth;
+    winFlash.style.animation = 'flashAnim 0.8s ease forwards';
+    setTimeout(() => { winFlash.style.display = 'none'; }, 900);
+}
 
-function mainScreen(){
-    if (balance > 0) {
-        spinButton.setAttribute('class', 'open');
-        spinButton.style.display = 'block';
-    } else {
-        spinButton.setAttribute('class', 'disabled');
-        spinButton.style.display = 'none';
+function showJackpotBanner(text) {
+    jackpotBanner.textContent = text;
+    jackpotBanner.style.display = 'block';
+    jackpotBanner.style.animation = 'none';
+    void jackpotBanner.offsetWidth;
+    jackpotBanner.style.animation = 'jackpotPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+    setTimeout(() => { jackpotBanner.style.display = 'none'; }, 2200);
+}
+
+function highlightReels(reels) {
+    reels.forEach(r => {
+        r.classList.add('win-highlight');
+        setTimeout(() => r.classList.remove('win-highlight'), 1600);
+    });
+}
+
+// ============================================================
+//  BROKE CHECK
+// ============================================================
+function startBrokeCheck() {
+    stopBrokeCheck();
+    brokeCheckInterval = setInterval(brokeCheck, 500);
+}
+
+function stopBrokeCheck() {
+    if (brokeCheckInterval) { clearInterval(brokeCheckInterval); brokeCheckInterval = null; }
+}
+
+function brokeCheck() {
+    if (currentScreen !== 'main' || isSpinning) return;
+
+    updateSpinButtonState();
+    updateLoanButtonState();
+
+    if (balance <= 0 && debt > 0) {
+        stopBrokeCheck();
+        showLoseScreen();
     }
-    backOrQuitButton.innerHTML = "Save and Quit";
-    backOrQuitButton.style.left = "12%";
-    console.log("Main Screen Opened");
-    if (currentScreen == "profile-name") {
-        // Remove objects from profile screen
-        profileText.style.display = 'none';
-        selectButton.style.display = 'none';
-        avatarSelectMid.setAttribute('class', 'avatar3')
-    }
-    // Hide title screen elements
-    themeButton.style.display = "block";
-    titleScreenContainer.style.display = 'none';
-    welcomeSign.style.display = 'none';
-    slotMachineTitle.style.display = 'none';
-    subtitle.style.display = 'none';
-    // Show main screen elements
-    profileNameElement.style.display = 'block';
-    balanceElement.style.display = 'block';
-    slot1.style.display = 'block';
-    slot2.style.display = 'block';
-    slot3.style.display = 'block';
-    spinButton.style.display = 'block';
-    loanButton.style.display = 'block';
-    betButton.style.display = 'block';
-    currentScreen = "main";
-    debtElement.style.display = 'block';
-    // change background to main screen
-    background.setAttribute('src', '../images/MainScreen.jpg');
 }
 
-// Theme Manager Elements
-let themeButton = document.getElementById("themeButton");
-let themeManager = document.getElementById("themeManager");
-let closeThemeManager = document.getElementById("closeThemeManager");
-
-// Theme buttons
-let themePurple = document.getElementById("themePurple");
-let themeBlue = document.getElementById("themeBlue");
-let themeDark = document.getElementById("themeDark");
-
-// Helper: apply a theme without removing other body classes
-function applyTheme(themeName) {
-    document.body.classList.remove("theme-purple", "theme-blue", "theme-dark");
-    document.body.classList.add(themeName);
-
-    // Glow automatically updates because CSS variables change
+// ============================================================
+//  LOSE SCREEN
+// ============================================================
+function showLoseScreen() {
+    loseScreen.style.display = 'flex';
+    music.pause();
 }
 
-// Open Theme Manager
+loseRestartButton.onmousedown = function () {
+    buttonClick(loseRestartButton, () => {
+        loseScreen.style.display = 'none';
+        // Reset current profile
+        balance = 1000;
+        debt = 0;
+        const idx = profileMatrix.findIndex(p => p.name === profileName && p.avatar === profilePic);
+        if (idx >= 0) { profileMatrix[idx].balance = 1000; profileMatrix[idx].debt = 0; }
+        goToMainScreen();
+        startMusic();
+    });
+};
+
+loseQuitButton.onmousedown = function () {
+    buttonClick(loseQuitButton, () => {
+        loseScreen.style.display = 'none';
+        stopBrokeCheck();
+        balance = 1000;
+        debt = 0;
+        resetToTitle();
+        startMusic();
+    });
+};
+
+// ============================================================
+//  THEME MANAGER
+// ============================================================
 themeButton.onmousedown = function () {
-    buttonClick(themeButton, function () {
-        themeManager.style.display = "block";
+    buttonClick(themeButton, () => {
+        themeManager.style.display = themeManager.style.display === 'none' ? '' : 'none';
     });
 };
 
-// Close Theme Manager
 closeThemeManager.onmousedown = function () {
-    buttonClick(closeThemeManager, function () {
-        themeManager.style.display = "none";
-    });
+    buttonClick(closeThemeManager, () => { themeManager.style.display = 'none'; });
 };
 
-// Select Themes
-themePurple.onmousedown = function () {
-    buttonClick(themePurple, function () {
-        applyTheme("theme-purple");
-    });
-};
+function applyTheme(name) {
+    document.body.classList.remove('theme-blue', 'theme-dark', 'theme-gold', 'theme-purple');
+    if (name) document.body.classList.add(name);
+}
 
-themeBlue.onmousedown = function () {
-    buttonClick(themeBlue, function () {
-        applyTheme("theme-blue");
-    });
-};
+themePurple.onmousedown = function () { buttonClick(themePurple, () => applyTheme('theme-purple')); };
+themeBlue.onmousedown   = function () { buttonClick(themeBlue,   () => applyTheme('theme-blue')); };
+themeDark.onmousedown   = function () { buttonClick(themeDark,   () => applyTheme('theme-dark')); };
+themeGold.onmousedown   = function () { buttonClick(themeGold,   () => applyTheme('theme-gold')); };
 
-themeDark.onmousedown = function () {
-    buttonClick(themeDark, function () {
-        applyTheme("theme-dark");
-    });
-};
+// ============================================================
+//  INIT
+// ============================================================
+window.addEventListener('load', () => {
+    // Music starts on first user interaction (browser policy)
+    document.addEventListener('click', startMusic, { once: true });
+    document.addEventListener('mousedown', startMusic, { once: true });
+});
