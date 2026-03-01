@@ -1,38 +1,67 @@
-# CSC289 Programming Capstone
-## Sprint Status Update
+# CSC289 Programming Capstone  
+## Sprint Status Update  
+
+**Status Update:** Sprint 2  
+**Project Name:** Jackpot-Therapy  
+**Team Number:** 5  
+**Team Lead / Scrum Master:** Andeo Nelson  
 
 ---
 
-## Status Update: Sprint 1 - Week 1
-
-**Project Name:** Jackpot Therapy
-**Team Number:** 5
-**Team Lead/Scrum Master:** Andeo Nelson
-
---
-
-## Trello Board
-
-![Trello board screenshot](images/trello-board-week1.png)
+## Trello Board  
+https://trello.com/b/ovDnuu0s/team-5-jackpot-therapy
 
 ---
 
+## STATUS UPDATE DETAILS  
 
-## STATUS UPDATE DETAILS
+### Tasks Scheduled for This Sprint  
 
-### Tasks Scheduled for this week:
-- Review code we already have and make a list of features we need to add.
-- Build UI layout
-- Create basic navigation
-- Project Skeleton & Routing
-- Add cards (tasks) to Trello
+- Define symbol set for slot machine  
+- Implement credits system and bet deduction logic  
+- Assign values to symbols and create payout structure  
+- Continue development of spin feature  
+- Build payout table  
+- Improve project skeleton & routing  
+- Begin account login functionality  
 
 ---
 
-### Taks Completed this week (by Name)
--Reviewed Code (Nuno)
--Made Trello and lists (Andeo)
+### Tasks Completed This Sprint (By Name)  
 
-### Problems/Challenges/Roadblocks
--Communtication (not resolved)
--List of features needed for the app (not resolved)
+**Nuno Handem Ribeiro**
+- Continued development of slot machine core logic  
+- Worked on spin feature and symbol structure  
+
+**MaryElizabeth Chukwu**
+- Built and refined UI layout  
+- Designed bright, interactive interface elements  
+
+**Tristan Hawkins**
+- Created symbol math logic  
+- Assisted with payout table structure  
+- Identified balance and end credit issues  
+
+**Sheetal Shekar**
+- Updated Sprint Development Log  
+- Documented system discussions and feature planning  
+
+**Deandre Scott**
+- Assisted with backend logic and credits system refinement  
+
+**Idris Sampson**
+- Supported gameplay mechanics planning and implementation discussions  
+
+---
+
+### Problems / Challenges / Roadblocks  
+
+- Betting and credit deduction inconsistencies  
+- Balance calculation bugs  
+- End credit display issues  
+- Clarifying borrowing system and balance recovery mechanics  
+- Strengthening communication consistency among team members  
+
+---
+
+**Status:** In Progress – payout table, spin feature, and betting logic actively being refined while login and borrowing systems are being planned.
