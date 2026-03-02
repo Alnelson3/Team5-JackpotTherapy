@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up – Jackpot Therapy</title>
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/videophreak');
+
+        :root {
+            --btn-bg: #9d7fd5;
+            --btn-shadow: rgb(136,0,255);
+            --accent: #c19fff;
+            --glow: rgb(144,0,255);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'videophreak', sans-serif;
+            background: #0a0010;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(144,0,255,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(100,0,200,0.1) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(160deg, #1a0030 0%, #3d0060 100%);
+            border: 2px solid var(--btn-shadow);
+            border-radius: 28px;
+            padding: 40px 50px;
+            width: 480px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 0 60px rgba(136,0,255,0.4);
+        }
+
+        h1 {
+            font-family: 'videophreak', sans-serif;
+            font-size: 32px;
+            color: var(--accent);
+            text-shadow: 0 0 20px var(--glow);
+            text-align: center;
+            animation: glowPulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%,100% { text-shadow: 0 0 20px var(--glow); }
+            50%      { text-shadow: 0 0 50px var(--glow), 0 0 90px var(--glow); }
+        }
+
+        /* Style Django's auto-generated form fields */
+        .form-wrapper { width: 100%; }
+
+        .form-wrapper p { margin-bottom: 16px; }
+
+        .form-wrapper label {
+            display: block;
+            font-family: 'videophreak', sans-serif;
+            font-size: 15px;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .form-wrapper input[type="text"],
+        .form-wrapper input[type="password"] {
+            width: 100%;
+            padding: 11px 16px;
+            background: rgba(255,255,255,0.08);
+            border: 2px solid rgba(157,127,213,0.5);
+            border-radius: 12px;
+            color: #fff;
+            font-family: sans-serif;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-wrapper input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 16px rgba(193,159,255,0.4);
+        }
+
+        .form-wrapper .helptext {
+            font-family: sans-serif;
+            font-size: 12px;
+            color: rgba(193,159,255,0.5);
+            margin-top: 4px;
+            display: block;
+        }
+
+        .form-wrapper ul.errorlist {
+            list-style: none;
+            color: #f99;
+            font-family: sans-serif;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--btn-bg);
+            color: #fff;
+            border: 3px solid #000;
+            border-radius: 14px;
+            font-family: 'videophreak', sans-serif;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 1px 1px 12px var(--btn-shadow);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .btn:hover {
+            background: #b48ee8;
+            transform: scale(1.04);
+            box-shadow: 2px 2px 22px var(--btn-shadow);
+        }
+
+        .footer-links {
+            font-family: sans-serif;
+            font-size: 14px;
+            color: rgba(193,159,255,0.6);
+            text-align: center;
+        }
+
+        .footer-links a { color: var(--accent); text-decoration: none; }
+        .footer-links a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div style="font-size:44px; animation: floatLogo 3s ease-in-out infinite;">🎰</div>
+    <h1>Create Account</h1>
+
+    <form method="post" style="width:100%;">
+        {% csrf_token %}
+        <div class="form-wrapper">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn" style="margin-top:8px;">SIGN UP</button>
+    </form>
+
+    <div class="footer-links">
+        Already have an account? <a href="{% url 'login' %}">Log In</a>
+    </div>
+</div>
+
+<style>
+@keyframes floatLogo {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+}
+</style>
+</body>
+</html>

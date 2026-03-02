@@ -1,0 +1,486 @@
+@import url('https://fonts.cdnfonts.com/css/videophreak');
+
+/* ── CSS Variables (default: Purple theme) ── */
+:root {
+    --btn-bg:           #9d7fd5;
+    --btn-hover-bg:     #b48ee8;
+    --btn-text:         #ffffff;
+    --btn-border:       #000000;
+    --btn-shadow:       rgb(136, 0, 255);
+    --btn-text-stroke:  #000000;
+    --accent:           #c19fff;
+    --glow:             rgb(144, 0, 255);
+    --panel-bg:         rgba(255,255,255,0.92);
+    --hud-bg:           rgba(0,0,0,0.55);
+    --reel-bg:          rgba(0,0,0,0.7);
+    --reel-border:      #9d7fd5;
+    --win-color:        #ffd700;
+}
+
+body.theme-blue  { --btn-bg:#5b9ef4; --btn-hover-bg:#7bb6ff; --btn-shadow:#3a80e0; --accent:#a8d4ff; --glow:#2266cc; --reel-border:#5b9ef4; }
+body.theme-dark  { --btn-bg:#333; --btn-hover-bg:#555; --btn-shadow:#888; --accent:#ccc; --glow:#aaa; --panel-bg:rgba(20,20,20,0.95); --hud-bg:rgba(0,0,0,0.8); --reel-bg:rgba(10,10,10,0.9); --reel-border:#555; }
+body.theme-gold  { --btn-bg:#c89b14; --btn-hover-bg:#e0b820; --btn-shadow:#ffdc5e; --accent:#ffe680; --glow:#d4a017; --reel-border:#c89b14; }
+body.theme-purple { --btn-bg:#9d7fd5; --btn-hover-bg:#b48ee8; --btn-shadow:rgb(136,0,255); --accent:#c19fff; --glow:rgb(144,0,255); }
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'videophreak', sans-serif;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    cursor: default;
+    background: #0a0010;
+}
+
+/* ── Background ── */
+.game-bg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    transition: opacity 0.4s ease;
+}
+
+/* ── Fallback gradient bg when no image ── */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(144,0,255,0.2) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(100,0,200,0.15) 0%, transparent 50%),
+        linear-gradient(180deg, #0a0010 0%, #1a0030 100%);
+    z-index: -1;
+}
+
+/* ── Screen containers ── */
+.screen {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: screenFadeIn 0.35s ease;
+}
+
+@keyframes screenFadeIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn-game {
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    border: 3px solid var(--btn-border);
+    box-shadow: 1px 1px 12px var(--btn-shadow);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    -webkit-text-stroke: 0.5px var(--btn-text-stroke);
+    font-family: 'videophreak', sans-serif;
+    font-size: 28px;
+    padding: 14px 44px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+}
+
+.btn-game:hover {
+    background-color: var(--btn-hover-bg);
+    transform: scale(1.06);
+    box-shadow: 2px 2px 22px var(--btn-shadow);
+}
+
+.btn-game:active {
+    background-color: color-mix(in srgb, var(--btn-bg) 70%, #000 30%);
+    transform: scale(0.95);
+    box-shadow: inset 2px 2px 6px rgba(0,0,0,0.4);
+}
+
+.btn-game:disabled, .btn-game.disabled {
+    background-color: #555;
+    color: #999;
+    border-color: #333;
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.btn-secondary {
+    background-color: rgba(100,100,100,0.5) !important;
+    box-shadow: none !important;
+}
+
+/* ============================================================
+   TITLE SCREEN
+   ============================================================ */
+.title-screen-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background: linear-gradient(160deg, #1a0030 0%, #3d0060 100%);
+    border: 2px solid var(--btn-shadow);
+    border-radius: 28px;
+    padding: 60px 80px;
+    box-shadow: 0 0 60px rgba(144,0,255,0.4);
+}
+
+h1.title {
+    font-family: 'videophreak', sans-serif;
+    font-size: 64px;
+    color: var(--accent);
+    text-shadow: 0 0 20px var(--glow);
+    -webkit-text-stroke: 1px #000;
+    text-align: center;
+    animation: glowPulse 2.5s ease-in-out infinite;
+}
+
+.subtitle {
+    font-family: 'videophreak', sans-serif;
+    font-size: 22px;
+    color: var(--accent);
+    text-shadow: 0 0 12px var(--glow);
+    letter-spacing: 4px;
+    margin-bottom: 12px;
+}
+
+.title-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin-top: 10px;
+}
+
+.title-play-btn {
+    font-size: 32px !important;
+    padding: 18px 64px !important;
+    animation: pulseBtn 2s ease-in-out infinite;
+}
+
+@keyframes pulseBtn {
+    0%,100% { box-shadow: 1px 1px 12px var(--btn-shadow); }
+    50%      { box-shadow: 0 0 32px var(--btn-shadow), 0 0 60px var(--btn-shadow); }
+}
+
+@keyframes glowPulse {
+    0%,100% { text-shadow: 0 0 20px var(--glow); }
+    50%      { text-shadow: 0 0 50px var(--glow), 0 0 90px var(--glow); }
+}
+
+/* ============================================================
+   UNIVERSAL NAV BUTTON
+   ============================================================ */
+.nav-btn {
+    position: fixed !important;
+    bottom: 28px !important;
+    left: 50% !important;
+    top: auto !important;
+    transform: translateX(-50%) !important;
+    font-size: 22px !important;
+    padding: 10px 36px !important;
+    z-index: 200;
+}
+
+/* ============================================================
+   HUD
+   ============================================================ */
+.hud-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: var(--hud-bg);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 100;
+    border-bottom: 1px solid rgba(157,127,213,0.3);
+}
+
+.hud-left { display: flex; align-items: center; gap: 14px; }
+
+.hud-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 12px var(--glow);
+    object-fit: cover;
+}
+
+.hud-info { display: flex; flex-direction: column; gap: 2px; }
+
+.hud-name {
+    font-family: 'videophreak', sans-serif;
+    font-size: 18px;
+    color: var(--accent);
+    text-shadow: 0 0 8px var(--glow);
+}
+
+.hud-balance {
+    font-family: 'videophreak', sans-serif;
+    font-size: 24px;
+    color: #fff;
+    text-shadow: 0 0 10px var(--glow);
+}
+
+.hud-balance.losing { color: #ff6b6b; text-shadow: 0 0 10px #f00; }
+
+.hud-right { display: flex; align-items: center; gap: 14px; }
+
+.hud-debt {
+    font-family: 'videophreak', sans-serif;
+    font-size: 18px;
+    color: #ff6b6b;
+    text-shadow: 0 0 8px #f00;
+    animation: debtPulse 1s ease-in-out infinite;
+}
+
+@keyframes debtPulse {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.6; }
+}
+
+.theme-btn { font-size: 22px !important; padding: 8px 18px !important; }
+
+/* ============================================================
+   SLOT STAGE
+   ============================================================ */
+.slot-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 90px;
+    flex: 1;
+}
+
+.reel-wrapper {
+    display: flex;
+    gap: 24px;
+    background: var(--reel-bg);
+    padding: 28px 36px;
+    border-radius: 24px;
+    border: 3px solid var(--reel-border);
+    box-shadow: 0 0 40px var(--btn-shadow), inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.reel {
+    width: 160px;
+    height: 160px;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid var(--reel-border);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.reel img {
+    width: 130px;
+    height: 130px;
+    object-fit: contain;
+    transition: transform 0.05s ease;
+}
+
+.reel.spinning img { animation: reelSpin 0.12s linear infinite; }
+
+@keyframes reelSpin {
+    0%   { transform: translateY(0)    scaleY(1);   }
+    25%  { transform: translateY(-8px) scaleY(0.9); }
+    50%  { transform: translateY(0)    scaleY(1);   }
+    75%  { transform: translateY(8px)  scaleY(0.9); }
+    100% { transform: translateY(0)    scaleY(1);   }
+}
+
+.reel.win-highlight {
+    border-color: gold;
+    box-shadow: 0 0 30px gold;
+    animation: reelWinFlash 0.5s ease-in-out 3;
+}
+
+@keyframes reelWinFlash {
+    0%,100% { box-shadow: 0 0 10px gold; }
+    50%      { box-shadow: 0 0 50px gold, 0 0 80px gold; }
+}
+
+/* ============================================================
+   GAME CONTROLS
+   ============================================================ */
+.game-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    position: fixed;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+}
+
+.bet-btn  { font-size: 22px !important; padding: 12px 32px !important; }
+.spin-btn { font-size: 34px !important; padding: 18px 60px !important; animation: pulseBtn 2s ease-in-out infinite; }
+.loan-btn { font-size: 20px !important; padding: 10px 28px !important; }
+
+/* ============================================================
+   BET DROPDOWN
+   ============================================================ */
+.bet-dropdown {
+    position: fixed;
+    bottom: 160px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--panel-bg);
+    border: 2px solid var(--btn-border);
+    border-radius: 20px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 150;
+    box-shadow: 0 0 24px var(--btn-shadow);
+    animation: dropIn 0.2s ease;
+}
+
+@keyframes dropIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.bet-opt-btn { font-size: 22px !important; padding: 10px 40px !important; width: 260px !important; }
+
+/* ============================================================
+   WIN FLASH / JACKPOT BANNER
+   ============================================================ */
+.win-flash {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 300;
+    animation: flashAnim 0.8s ease forwards;
+}
+
+@keyframes flashAnim {
+    0%   { background: rgba(255,215,0,0.4); }
+    100% { background: rgba(255,215,0,0); }
+}
+
+.jackpot-banner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: 'videophreak', sans-serif;
+    font-size: 72px;
+    color: gold;
+    text-shadow: 0 0 40px gold, 0 0 80px orange, 2px 2px 0 #000;
+    -webkit-text-stroke: 2px #000;
+    z-index: 400;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+@keyframes jackpotPop {
+    from { transform: translate(-50%,-50%) scale(0.3); opacity: 0; }
+    to   { transform: translate(-50%,-50%) scale(1);   opacity: 1; }
+}
+
+/* ============================================================
+   THEME PANEL
+   ============================================================ */
+.theme-panel {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    width: 240px;
+    background: var(--panel-bg);
+    border: 2px solid var(--btn-border);
+    border-radius: 20px;
+    padding: 20px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    z-index: 200;
+    box-shadow: 0 0 24px var(--btn-shadow);
+    animation: dropIn 0.2s ease;
+}
+
+.theme-panel-title { font-family: 'videophreak', sans-serif; font-size: 22px; color: #333; }
+.theme-opt-btn { font-size: 18px !important; padding: 10px 0 !important; width: 200px !important; }
+
+/* ============================================================
+   LOSE / GAME-OVER OVERLAY
+   ============================================================ */
+.lose-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 500;
+    animation: screenFadeIn 0.3s ease;
+}
+
+.lose-card {
+    background: linear-gradient(160deg, #1a0030 0%, #3d0060 100%);
+    border: 3px solid var(--btn-shadow);
+    border-radius: 28px;
+    padding: 50px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 0 60px var(--btn-shadow);
+    max-width: 480px;
+    text-align: center;
+}
+
+.lose-icon  { font-size: 80px; animation: shake 0.5s ease 3; }
+.lose-title { font-family: 'videophreak', sans-serif; font-size: 54px; color: #ff6b6b; text-shadow: 0 0 24px #f00, 2px 2px 0 #000; }
+.lose-sub   { font-family: 'videophreak', sans-serif; font-size: 20px; color: var(--accent); line-height: 1.6; }
+.lose-btn   { width: 280px !important; font-size: 22px !important; }
+.lose-btn-secondary { background-color: #555 !important; box-shadow: none !important; }
+
+@keyframes shake {
+    0%,100% { transform: rotate(0deg); }
+    25%      { transform: rotate(-12deg); }
+    75%      { transform: rotate(12deg); }
+}
+
+/* ============================================================
+   MISC
+   ============================================================ */
+.balance-pop { animation: coinPop 0.35s ease; }
+
+@keyframes coinPop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.25); }
+    70%  { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: var(--btn-bg); border-radius: 3px; }

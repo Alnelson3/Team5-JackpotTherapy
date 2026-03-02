@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Over – Jackpot Therapy</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/game.css' %}">
+</head>
+<body>
+
+<div class="screen" style="justify-content:center; align-items:center;">
+    <div class="lose-card" style="max-width:540px; width:90%;">
+
+        <div class="lose-icon">📊</div>
+        <h1 class="lose-title" style="font-size:42px; color:#c19fff;">Game Stats</h1>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-label">Balance</span>
+                <span class="stat-value">${{ profile.balance }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Debt</span>
+                <span class="stat-value" style="color:#f99;">${{ profile.debt }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Total Spins</span>
+                <span class="stat-value">{{ profile.total_spins }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Jackpots Hit</span>
+                <span class="stat-value" style="color:gold;">{{ profile.jackpots_hit }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Total Won</span>
+                <span class="stat-value" style="color:#6f6;">${{ profile.total_winnings }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Total Lost</span>
+                <span class="stat-value" style="color:#f66;">${{ profile.total_losses }}</span>
+            </div>
+            <div class="stat-item" style="grid-column: 1 / -1;">
+                <span class="stat-label">Net Profit</span>
+                <span class="stat-value {% if profile.net_profit >= 0 %}stat-positive{% else %}stat-negative{% endif %}">
+                    ${{ profile.net_profit }}
+                </span>
+            </div>
+        </div>
+
+        <div style="display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin-top:8px;">
+            <form method="post" action="{% url 'reset_game' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-game lose-btn">🔄 Start Over</button>
+            </form>
+            <a href="{% url 'credits' %}" class="btn-game lose-btn lose-btn-secondary">🏁 Exit</a>
+        </div>
+
+    </div>
+</div>
+
+<style>
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    width: 100%;
+    margin: 8px 0;
+}
+.stat-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(193,159,255,0.2);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.stat-label {
+    font-family: sans-serif;
+    font-size: 12px;
+    color: rgba(193,159,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.stat-value {
+    font-family: 'videophreak', sans-serif;
+    font-size: 26px;
+    color: #c19fff;
+}
+.stat-positive { color: #6f6 !important; }
+.stat-negative { color: #f66 !important; }
+</style>
+
+</body>
+</html>

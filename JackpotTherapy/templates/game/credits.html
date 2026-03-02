@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credits – Jackpot Therapy</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/game.css' %}">
+    <style>
+        body {
+            background: #000;
+            overflow: hidden;
+        }
+
+        .credits-wrapper {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .credits-scroll {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            animation: scrollUp 18s linear forwards;
+            padding: 0 40px;
+        }
+
+        @keyframes scrollUp {
+            from { transform: translateY(100vh); }
+            to   { transform: translateY(-100%); }
+        }
+
+        .credits-title {
+            font-family: 'videophreak', sans-serif;
+            font-size: 64px;
+            color: gold;
+            text-shadow: 0 0 40px gold, 0 0 80px orange;
+            margin-bottom: 20px;
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        .credits-subtitle {
+            font-family: 'videophreak', sans-serif;
+            font-size: 24px;
+            color: #c19fff;
+            text-shadow: 0 0 12px rgb(144,0,255);
+            letter-spacing: 4px;
+            margin-bottom: 80px;
+        }
+
+        .credits-section-title {
+            font-family: 'videophreak', sans-serif;
+            font-size: 22px;
+            color: rgba(193,159,255,0.6);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .credits-name {
+            font-family: 'videophreak', sans-serif;
+            font-size: 36px;
+            color: #c19fff;
+            text-shadow: 0 0 20px rgb(144,0,255);
+            margin-bottom: 16px;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        .credits-role {
+            font-family: sans-serif;
+            font-size: 14px;
+            color: rgba(193,159,255,0.5);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 48px;
+        }
+
+        .credits-divider {
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #9d7fd5, transparent);
+            margin: 40px auto;
+        }
+
+        .credits-thanks {
+            font-family: 'videophreak', sans-serif;
+            font-size: 28px;
+            color: gold;
+            text-shadow: 0 0 20px gold;
+            margin-top: 60px;
+            margin-bottom: 20px;
+        }
+
+        .credits-fin {
+            font-family: 'videophreak', sans-serif;
+            font-size: 72px;
+            color: #c19fff;
+            text-shadow: 0 0 40px rgb(144,0,255);
+            margin-top: 40px;
+        }
+
+        @keyframes glowPulse {
+            0%,100% { text-shadow: 0 0 20px rgb(144,0,255); }
+            50%      { text-shadow: 0 0 50px rgb(144,0,255), 0 0 90px rgb(144,0,255); }
+        }
+
+        /* Skip button */
+        .skip-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+<div class="credits-wrapper">
+    <div class="credits-scroll">
+
+        <div class="credits-title">🎰</div>
+        <div class="credits-title" style="font-size:48px;">Jackpot Therapy</div>
+        <div class="credits-subtitle">Fortune Machine</div>
+
+        <div class="credits-section-title">— Developed by Team 5 —</div>
+
+        <div class="credits-divider"></div>
+
+        <!-- Replace with team member names & roles -->
+        <div class="credits-name">Andeo Ly Nelson</div>
+        <div class="credits-role">Project Lead / Backend</div>
+
+        <div class="credits-name">MaryElizabeth Chukwu</div>
+        <div class="credits-role">Frontend / UI Design</div>
+
+        <div class="credits-name">Team Member 3</div>
+        <div class="credits-role">Game Logic / Django</div>
+
+        <div class="credits-name">Team Member 4</div>
+        <div class="credits-role">Database / Models</div>
+
+        <div class="credits-name">Team Member 5</div>
+        <div class="credits-role">Testing / QA</div>
+        <!-- End of list  -->
+
+        <div class="credits-divider"></div>
+
+        <div class="credits-section-title">— Built With —</div>
+        <div class="credits-name" style="font-size:24px; margin-bottom:8px;">Django 5</div>
+        <div class="credits-role">Python Web Framework</div>
+        <div class="credits-name" style="font-size:24px; margin-bottom:8px;">Videophreak Font</div>
+        <div class="credits-role">Typography</div>
+
+        <div class="credits-divider"></div>
+
+        <div class="credits-thanks">Thank you for playing!</div>
+        <div class="credits-fin"></div>
+
+    </div>
+</div>
+
+<a href="{% url 'title' %}" class="btn-game nav-btn skip-btn">↩ Main Menu</a>
+
+</body>
+</html>

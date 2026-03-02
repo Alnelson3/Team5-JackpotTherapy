@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jackpot Therapy</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/game.css' %}">
+</head>
+<body>
+
+<!-- AUDIO -->
+<audio src="{% static 'sounds/music.mp3' %}"   id="music"       loop></audio>
+<audio src="{% static 'sounds/click.mp3' %}"   id="clickSound"></audio>
+<audio src="{% static 'sounds/spin.mp3' %}"    id="spinSound"></audio>
+<audio src="{% static 'sounds/jackpot.mp3' %}" id="jackpotSound"></audio>
+
+<!-- MAIN GAME SCREEN -->
+<div class="screen" id="screen-main">
+
+    <!-- HUD Top Bar -->
+    <div class="hud-bar">
+        <div class="hud-left">
+            <img src="{% static 'images/Avatars/' %}{{ profile.avatar }}.png"
+                 class="hud-avatar" id="hudAvatar" alt="Avatar">
+            <div class="hud-info">
+                <span class="hud-name">{{ user.username }}</span>
+                <span class="hud-balance" id="balance">${{ profile.balance|floatformat:0 }}</span>
+            </div>
+        </div>
+        <div class="hud-right">
+            <span class="hud-debt" id="debtElement" {% if profile.debt == 0 %}style="display:none"{% endif %}>
+                Debt: $<span id="debtNum">{{ profile.debt }}</span>
+            </span>
+            <button class="btn-game theme-btn" id="themeButton">🎨</button>
+        </div>
+    </div>
+
+    <!-- Slot Reels -->
+    <div class="slot-stage">
+        <div class="reel-wrapper">
+            <div class="reel" id="reel1">
+                <img src="{% static 'images/Icons/1.png' %}" id="slot1" alt="Slot 1">
+            </div>
+            <div class="reel" id="reel2">
+                <img src="{% static 'images/Icons/2.png' %}" id="slot2" alt="Slot 2">
+            </div>
+            <div class="reel" id="reel3">
+                <img src="{% static 'images/Icons/3.png' %}" id="slot3" alt="Slot 3">
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="game-controls">
+        <button class="btn-game bet-btn" id="betButton">↓ Bet: $<strong id="betAmount">100</strong> ↓</button>
+        <button class="btn-game spin-btn" id="spinButton">SPIN</button>
+        <button class="btn-game loan-btn" id="loanButton">Loan</button>
+    </div>
+
+    <!-- Bet Dropdown -->
+    <div id="amountOptions" class="bet-dropdown" style="display:none;">
+        <button class="btn-game bet-opt-btn" id="bet10">$10</button>
+        <button class="btn-game bet-opt-btn" id="bet100">$100</button>
+        <button class="btn-game bet-opt-btn" id="bet1000">$1,000</button>
+        <button class="btn-game bet-opt-btn" id="betAll">ALL IN 🔥</button>
+    </div>
+
+    <!-- Win Flash -->
+    <div id="winFlash" class="win-flash" style="display:none;"></div>
+
+    <!-- Jackpot Banner -->
+    <div id="jackpotBanner" class="jackpot-banner" style="display:none;">🎰 JACKPOT! 🎰</div>
+
+    <!-- Theme Panel -->
+    <div id="themeManager" class="theme-panel" style="display:none;">
+        <h2 class="theme-panel-title">Theme</h2>
+        <button class="btn-game theme-opt-btn" id="themePurple">💜 Purple</button>
+        <button class="btn-game theme-opt-btn" id="themeBlue">💙 Blue</button>
+        <button class="btn-game theme-opt-btn" id="themeDark">🖤 Dark</button>
+        <button class="btn-game theme-opt-btn" id="themeGold">💛 Gold</button>
+        <button class="btn-game theme-opt-btn" id="closeThemeManager">✕ Close</button>
+    </div>
+
+    <!-- Nav buttons -->
+    <div style="position:fixed; bottom:28px; left:50%; transform:translateX(-50%); display:flex; gap:16px; z-index:200;">
+        <button class="btn-game" style="font-size:22px; padding:10px 36px;" id="quitButton">Save & Quit</button>
+        <form method="post" action="{% url 'reset_game' %}" style="margin:0;">
+            {% csrf_token %}
+            <button type="submit" class="btn-game" style="font-size:22px; padding:10px 36px;">Start Over</button>
+        </form>
+        <a href="{% url 'credits' %}" class="btn-game btn-secondary" style="font-size:22px; padding:10px 36px;">Exit</a>
+    </div>
+
+</div>
+
+<!-- GAME OVER OVERLAY (broke + in debt) -->
+<div id="loseScreen" class="lose-overlay" style="display:none;">
+    <div class="lose-card">
+        <div class="lose-icon">💸</div>
+        <h1 class="lose-title">You're Broke!</h1>
+        <p class="lose-sub">Out of money and in debt.<br>Better luck next time.</p>
+        <button class="btn-game lose-btn" id="loseRestartButton">Start Over</button>
+        <button class="btn-game lose-btn lose-btn-secondary" id="loseExitButton">See Stats</button>
+    </div>
+</div>
+
+<!-- Inject Django data for JS -->
+<script>
+    const DJANGO_DATA = {
+        balance:   {{ profile.balance }},
+        debt:      {{ profile.debt }},
+        avatar:    {{ profile.avatar }},
+        csrfToken: '{{ csrf_token }}',
+        spinUrl:        '{% url "spin" %}',
+        loanUrl:        '{% url "loan" %}',
+        saveProfileUrl: '{% url "save_profile" %}',
+        resetUrl:       '{% url "reset_game" %}',
+        quitUrl:        '{% url "quit_game" %}',
+        gameOverUrl:    '{% url "game_over" %}',
+        staticBase:     '{% static "" %}',
+    };
+</script>
+{% load static %}
+<script src="{% static 'js/game.js' %}"></script>
+</body>
+</html>
