@@ -1,67 +1,64 @@
 # CSC289 Programming Capstone  
-## Sprint Status Update  
+## Sprint Status Update
 
-**Status Update:** Sprint 2  
+**Status Update:** Sprint 3  
 **Project Name:** Jackpot-Therapy  
 **Team Number:** 5  
 **Team Lead / Scrum Master:** Andeo Nelson  
 
----
-
-## Trello Board  
+## Trello Board
 https://trello.com/b/ovDnuu0s/team-5-jackpot-therapy
 
 ---
 
-## STATUS UPDATE DETAILS  
+# STATUS UPDATE DETAILS
 
-### Tasks Scheduled for This Sprint  
-
-- Define symbol set for slot machine  
-- Implement credits system and bet deduction logic  
-- Assign values to symbols and create payout structure  
-- Continue development of spin feature  
-- Build payout table  
-- Improve project skeleton & routing  
-- Begin account login functionality  
+## Tasks Scheduled for This Sprint
+- Continue development of slot machine gameplay features  
+- Refine UI and user interaction elements  
+- Implement database considerations for saving user progress and account information  
+- Create Sprint 3 backlog and retrospective board in Trello  
+- Improve documentation and communication processes  
+- Review the current codebase and identify additional gameplay features needed  
 
 ---
 
-### Tasks Completed This Sprint (By Name)  
+## Tasks Completed This Sprint
 
-**Nuno Handem Ribeiro**
-- Continued development of slot machine core logic  
-- Worked on spin feature and symbol structure  
+### Nuno Handem Ribeiro
+- Continued development of slot machine core gameplay logic  
+- Worked on improving spin feature behavior  
 
-**MaryElizabeth Chukwu**
-- Built and refined UI layout  
-- Designed bright, interactive interface elements  
+### MaryElizabeth Chukwu
+- Refined UI layout and interface elements  
+- Helped maintain the bright and interactive design for the slot machine  
 
-**Tristan Hawkins**
-- Created symbol math logic  
-- Assisted with payout table structure  
-- Identified balance and end credit issues  
+### Tristan Hawkins
+- Worked on symbol value structure and payout logic  
+- Assisted with improvements to the payout table  
 
-**Sheetal Shekar**
-- Updated Sprint Development Log  
-- Documented system discussions and feature planning  
+### Sheetal Shekar
+- Updated Sprint Development Log documentation  
+- Organized development notes and sprint progress updates  
+- Helped prepare backlog documentation and retrospective planning  
 
-**Deandre Scott**
-- Assisted with backend logic and credits system refinement  
+### Deandre Scott
+- Assisted with backend logic and credits system improvements  
+- Worked on refining gameplay balance systems  
 
-**Idris Sampson**
-- Supported gameplay mechanics planning and implementation discussions  
-
----
-
-### Problems / Challenges / Roadblocks  
-
-- Betting and credit deduction inconsistencies  
-- Balance calculation bugs  
-- End credit display issues  
-- Clarifying borrowing system and balance recovery mechanics  
-- Strengthening communication consistency among team members  
+### Idris Sampson
+- Supported gameplay mechanic discussions and implementation planning  
+- Assisted with reviewing game functionality during team meetings  
 
 ---
 
-**Status:** In Progress – payout table, spin feature, and betting logic actively being refined while login and borrowing systems are being planned.
+## Problems / Challenges / Roadblocks
+- Difficulty accessing or running the application locally for some team members  
+- Limited visibility of application progress during meetings before screen sharing  
+- Questions about the best method for storing user progress and account data  
+- Ensuring spin logic, symbol values, and payout mechanics work consistently  
+
+---
+
+## Status
+**In Progress** – Gameplay mechanics such as spin functionality, symbol payouts, and credit systems continue to be refined. The team is also planning database integration for user accounts and progress while improving documentation, backlog organization, and team communication.
