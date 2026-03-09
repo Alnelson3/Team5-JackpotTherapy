@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth import logout
+from django.utils import timezone
 from .models import PlayerProfile
 
 
@@ -24,6 +25,7 @@ def title(request):
 def game(request):
     """Main game screen."""
     profile = get_or_create_profile(request.user)
+    profile.apply_recovery()
     return render(request, 'game/game.html', {'profile': profile})
 
 
@@ -141,3 +143,16 @@ def quit_game(request):
     """Save & quit — logs the user out and redirects to title."""
     logout(request)
     return redirect('title')
+
+
+@login_required
+def check_recovery(request):
+    """API endpoint: check and apply balance recovery."""
+    profile = get_or_create_profile(request.user)
+    profile.apply_recovery()
+    return JsonResponse({
+        'balance': profile.balance,
+        'recovery_in_minutes': max(0, 30 - int(
+            (timezone.now() - profile.last_recovery_check).total_seconds() / 60
+        ))
+    })

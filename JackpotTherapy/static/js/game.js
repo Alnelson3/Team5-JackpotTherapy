@@ -343,3 +343,21 @@ window.addEventListener('load', () => {
     document.addEventListener('click', startMusic, { once: true });
     document.addEventListener('keydown', startMusic, { once: true });
 });
+
+
+// Check for balance recovery every 5 minutes while on game screen
+setInterval(async () => {
+    const res = await fetch('/api/recovery/', {
+        headers: { 'X-CSRFToken': CSRF }
+    });
+    const data = await res.json();
+    if (data.balance !== balance) {
+        balance = data.balance;
+        updateBalanceDisplay();
+        updateSpinButton();
+        updateLoanButton();
+        if (data.balance > 0) {
+            showJackpotBanner('+$150 Recovery!');
+        }
+    }
+}, 5 * 60 * 1000);
