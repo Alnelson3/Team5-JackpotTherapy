@@ -1,0 +1,779 @@
+/* ============================================================
+   JACKPOT THERAPY — styles.css
+   Bright, fun, interactive UI with full theme support
+   ============================================================ */
+
+@import url('https://fonts.cdnfonts.com/css/videophreak');
+
+/* ── CSS Variables (default: Purple theme) ── */
+:root {
+    --btn-bg:           #9d7fd5;
+    --btn-hover-bg:     #b48ee8;
+    --btn-text:         #ffffff;
+    --btn-border:       #000000;
+    --btn-shadow:       rgb(136, 0, 255);
+    --btn-text-stroke:  #000000;
+    --accent:           #c19fff;
+    --glow:             rgb(144, 0, 255);
+    --panel-bg:         rgba(255,255,255,0.92);
+    --hud-bg:           rgba(0,0,0,0.55);
+    --reel-bg:          rgba(0,0,0,0.7);
+    --reel-border:      #9d7fd5;
+    --win-color:        #ffd700;
+}
+
+/* ── Theme: Blue ── */
+body.theme-blue {
+    --btn-bg:           #5b9ef4;
+    --btn-hover-bg:     #7bb6ff;
+    --btn-shadow:       #3a80e0;
+    --accent:           #a8d4ff;
+    --glow:             #2266cc;
+    --reel-border:      #5b9ef4;
+}
+
+/* ── Theme: Dark ── */
+body.theme-dark {
+    --btn-bg:           #333333;
+    --btn-hover-bg:     #555555;
+    --btn-shadow:       #888888;
+    --accent:           #cccccc;
+    --glow:             #aaaaaa;
+    --panel-bg:         rgba(20,20,20,0.95);
+    --hud-bg:           rgba(0,0,0,0.8);
+    --reel-bg:          rgba(10,10,10,0.9);
+    --reel-border:      #555555;
+}
+
+/* ── Theme: Gold ── */
+body.theme-gold {
+    --btn-bg:           #c89b14;
+    --btn-hover-bg:     #e0b820;
+    --btn-shadow:       #ffdc5e;
+    --accent:           #ffe680;
+    --glow:             #d4a017;
+    --reel-border:      #c89b14;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'videophreak', sans-serif;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    cursor: default;
+}
+
+/* ============================================================
+   BACKGROUND
+   ============================================================ */
+img.background {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    transition: opacity 0.4s ease;
+}
+
+/* ============================================================
+   SCREEN CONTAINERS
+   ============================================================ */
+.screen {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: screenFadeIn 0.35s ease;
+}
+
+@keyframes screenFadeIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* ============================================================
+   UNIVERSAL BACK/QUIT BUTTON
+   ============================================================ */
+.nav-btn {
+    position: fixed !important;
+    bottom: 28px !important;
+    left: 50% !important;
+    top: auto !important;
+    transform: translateX(-50%) !important;
+    font-size: 22px !important;
+    padding: 10px 36px !important;
+    z-index: 200;
+}
+
+/* ============================================================
+   BUTTONS — base .open / .closed / .disabled
+   ============================================================ */
+button.open {
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    border: 3px solid var(--btn-border);
+    box-shadow: 1px 1px 12px var(--btn-shadow);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    -webkit-text-stroke: 0.5px var(--btn-text-stroke);
+    font-family: 'videophreak', sans-serif;
+    font-size: 28px;
+    padding: 14px 44px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+button.open:hover {
+    background-color: var(--btn-hover-bg);
+    transform: scale(1.06);
+    box-shadow: 2px 2px 22px var(--btn-shadow);
+}
+
+button.open:active,
+button.closed {
+    background-color: color-mix(in srgb, var(--btn-bg) 70%, #000 30%);
+    transform: scale(0.95);
+    box-shadow: inset 2px 2px 6px rgba(0,0,0,0.4);
+    cursor: pointer;
+    color: rgba(255,255,255,0.8);
+    font-family: 'videophreak', sans-serif;
+    font-size: 28px;
+    padding: 14px 44px;
+    border: 3px solid var(--btn-border);
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button.disabled {
+    background-color: #555;
+    color: #999;
+    border: 3px solid #333;
+    box-shadow: none;
+    font-family: 'videophreak', sans-serif;
+    font-size: 28px;
+    padding: 14px 44px;
+    border-radius: 14px;
+    cursor: not-allowed;
+    opacity: 0.5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================================
+   SCREEN TITLE (shared heading for profile/avatar/name screens)
+   ============================================================ */
+.screen-title {
+    font-family: 'videophreak', sans-serif;
+    font-size: 54px;
+    color: var(--accent);
+    text-shadow: 0 0 24px var(--glow), 0 0 2px #000;
+    -webkit-text-stroke: 1px #000;
+    text-align: center;
+    margin-bottom: 32px;
+    animation: glowPulse 2.8s ease-in-out infinite;
+}
+
+/* ============================================================
+   TITLE SCREEN
+   ============================================================ */
+.title-screen-container {
+    position: relative;
+    width: 62%;
+    min-height: 80vh;
+    background-image: url('../images/purple-background.jpg');
+    background-size: cover;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    box-shadow: 0 0 60px rgba(144, 0, 255, 0.5);
+}
+
+.welcome-sign-img {
+    position: absolute;
+    top: -7%;
+    left: 68%;
+    transform: translateX(-50%);
+    width: 70%;
+    max-width: 560px;
+    filter: drop-shadow(0 0 20px rgba(157, 127, 213, 0.9));
+    z-index: 10;
+    animation: floatSign 3s ease-in-out infinite;
+}
+
+@keyframes floatSign {
+    0%, 100% { transform: translateX(-50%) translateY(0);    }
+    50%       { transform: translateX(-50%) translateY(-10px); }
+}
+
+h1.title {
+    font-family: 'videophreak', sans-serif;
+    font-size: 72px;
+    color: var(--accent);
+    text-shadow: 0 0 20px var(--glow);
+    -webkit-text-stroke: 1px #000;
+    text-align: center;
+    animation: glowPulse 2.5s ease-in-out infinite;
+    position: absolute;
+    top: 38%;
+    left: 68%;
+    transform: translateX(-50%);
+    z-index: 10;
+    white-space: nowrap;
+}
+
+@keyframes glowPulse {
+    0%, 100% { text-shadow: 0 0 20px var(--glow); }
+    50%       { text-shadow: 0 0 50px var(--glow), 0 0 90px var(--glow); }
+}
+
+.subtitle {
+    font-family: 'videophreak', sans-serif;
+    font-size: 24px;
+    color: var(--accent);
+    text-shadow: 0 0 12px var(--glow);
+    -webkit-text-stroke: 0.5px #000;
+    position: absolute;
+    top: 59%;
+    left: 68%;
+    transform: translateX(-50%);
+    z-index: 10;
+    letter-spacing: 3px;
+}
+
+.slot-machine-img {
+    position: absolute;
+    top: 8%;
+    left: 26%;
+    transform: translateX(-50%);
+    width: 55%;
+    max-width: 400px;
+    filter: drop-shadow(0 0 28px rgba(157, 127, 213, 0.9));
+    z-index: 5;
+    animation: machineBob 4s ease-in-out infinite;
+}
+
+@keyframes machineBob {
+    0%, 100% { transform: translateX(-50%) rotate(-1deg); }
+    50%       { transform: translateX(-50%) rotate(1deg) translateY(-6px); }
+}
+
+.title-play-btn {
+    position: absolute !important;
+    top: 73% !important;
+    left: 68% !important;
+    transform: translateX(-50%) !important;
+    font-size: 30px !important;
+    padding: 16px 56px !important;
+    z-index: 10;
+    animation: pulseBtn 2s ease-in-out infinite;
+}
+
+@keyframes pulseBtn {
+    0%, 100% { box-shadow: 1px 1px 12px var(--btn-shadow); }
+    50%       { box-shadow: 0 0 32px var(--btn-shadow), 0 0 60px var(--btn-shadow); }
+}
+
+/* ============================================================
+   PROFILE SELECT SCREEN
+   ============================================================ */
+.profile-select-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    max-width: 700px;
+    margin-bottom: 28px;
+    padding: 0 20px;
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 16px;
+    border: 3px solid transparent;
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    background: rgba(0,0,0,0.3);
+}
+
+.profile-card img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.profile-card span {
+    font-family: 'videophreak', sans-serif;
+    font-size: 16px;
+    color: #fff;
+    text-shadow: 0 0 6px #000;
+}
+
+.profile-card:hover {
+    transform: scale(1.07);
+    box-shadow: 0 0 18px var(--btn-shadow);
+}
+
+.profile-card.selected {
+    border-color: gold;
+    box-shadow: 0 0 24px gold;
+}
+
+.profile-confirm-btn {
+    font-size: 26px !important;
+    padding: 14px 50px !important;
+}
+
+/* ============================================================
+   AVATAR CAROUSEL
+   ============================================================ */
+.avatar-carousel {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 32px;
+}
+
+.carousel-btn {
+    font-size: 32px !important;
+    padding: 16px 28px !important;
+}
+
+.avatar-stage {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.avatar-center {
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 4px solid gold;
+    box-shadow: 0 0 30px gold, 0 0 10px rgba(0,0,0,0.8);
+    transition: src 0.2s ease;
+}
+
+.avatar-side {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 3px solid rgba(255,255,255,0.3);
+    opacity: 0.65;
+    transition: opacity 0.2s ease;
+}
+
+.avatar-side:hover { opacity: 0.85; }
+
+/* ============================================================
+   NAME ENTRY SCREEN
+   ============================================================ */
+.name-entry-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    background: var(--panel-bg);
+    padding: 40px 56px;
+    border-radius: 24px;
+    border: 3px solid var(--btn-border);
+    box-shadow: 0 0 40px var(--btn-shadow);
+}
+
+.name-input {
+    font-family: 'videophreak', sans-serif;
+    font-size: 34px;
+    color: #222;
+    background: rgba(255,255,255,0.9);
+    border: 3px solid var(--btn-bg);
+    border-radius: 14px;
+    padding: 14px 28px;
+    text-align: center;
+    outline: none;
+    width: 340px;
+    box-shadow: 0 0 14px var(--btn-shadow);
+    transition: box-shadow 0.2s ease;
+}
+
+.name-input:focus {
+    box-shadow: 0 0 30px var(--btn-shadow);
+}
+
+/* ============================================================
+   MAIN GAME SCREEN — HUD
+   ============================================================ */
+.hud-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: var(--hud-bg);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    border-bottom: 2px solid var(--reel-border);
+    z-index: 100;
+}
+
+.hud-left { display: flex; align-items: center; gap: 14px; }
+
+.hud-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 2px solid gold;
+    box-shadow: 0 0 10px gold;
+    object-fit: cover;
+}
+
+.hud-info { display: flex; flex-direction: column; }
+
+.hud-name {
+    font-family: 'videophreak', sans-serif;
+    font-size: 18px;
+    color: #fff;
+    text-shadow: 0 0 6px #000;
+}
+
+.hud-balance {
+    font-family: 'videophreak', sans-serif;
+    font-size: 26px;
+    color: #7eff7e;
+    text-shadow: 0 0 10px #00ff00, 0 0 3px #000;
+    transition: color 0.4s ease;
+}
+
+.hud-balance.losing { color: #ff7e7e; text-shadow: 0 0 10px #ff0000; }
+
+.hud-right { display: flex; align-items: center; gap: 16px; }
+
+.hud-debt {
+    font-family: 'videophreak', sans-serif;
+    font-size: 20px;
+    color: #ff6b6b;
+    text-shadow: 0 0 8px #f00, 0 0 2px #000;
+    animation: debtPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes debtPulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.6; }
+}
+
+.theme-btn {
+    font-size: 22px !important;
+    padding: 8px 18px !important;
+}
+
+/* ============================================================
+   SLOT STAGE / REELS
+   ============================================================ */
+.slot-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 90px; /* below HUD */
+    flex: 1;
+}
+
+.reel-wrapper {
+    display: flex;
+    gap: 24px;
+    background: var(--reel-bg);
+    padding: 28px 36px;
+    border-radius: 24px;
+    border: 3px solid var(--reel-border);
+    box-shadow: 0 0 40px var(--btn-shadow), inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.reel {
+    width: 160px;
+    height: 160px;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid var(--reel-border);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.reel img {
+    width: 130px;
+    height: 130px;
+    object-fit: contain;
+    transition: transform 0.05s ease;
+}
+
+/* Spinning animation applied via JS */
+.reel.spinning img {
+    animation: reelSpin 0.12s linear infinite;
+}
+
+@keyframes reelSpin {
+    0%   { transform: translateY(0)    scaleY(1);    }
+    25%  { transform: translateY(-8px) scaleY(0.9);  }
+    50%  { transform: translateY(0)    scaleY(1);    }
+    75%  { transform: translateY(8px)  scaleY(0.9);  }
+    100% { transform: translateY(0)    scaleY(1);    }
+}
+
+/* Win flash on reel */
+.reel.win-highlight {
+    border-color: gold;
+    box-shadow: 0 0 30px gold;
+    animation: reelWinFlash 0.5s ease-in-out 3;
+}
+
+@keyframes reelWinFlash {
+    0%, 100% { box-shadow: 0 0 10px gold; }
+    50%       { box-shadow: 0 0 50px gold, 0 0 80px gold; }
+}
+
+/* ============================================================
+   GAME CONTROLS
+   ============================================================ */
+.game-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    position: fixed;
+    bottom: 70px; /* above nav btn */
+    left: 0;
+    right: 0;
+}
+
+.bet-btn {
+    font-size: 22px !important;
+    padding: 12px 32px !important;
+}
+
+.spin-btn {
+    font-size: 34px !important;
+    padding: 18px 60px !important;
+    animation: pulseBtn 2s ease-in-out infinite;
+}
+
+.loan-btn {
+    font-size: 20px !important;
+    padding: 10px 28px !important;
+}
+
+/* ============================================================
+   BET DROPDOWN
+   ============================================================ */
+.bet-dropdown {
+    position: fixed;
+    bottom: 160px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--panel-bg);
+    border: 2px solid var(--btn-border);
+    border-radius: 20px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 150;
+    box-shadow: 0 0 24px var(--btn-shadow);
+    animation: dropIn 0.2s ease;
+}
+
+@keyframes dropIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.bet-opt-btn {
+    font-size: 22px !important;
+    padding: 10px 40px !important;
+    width: 260px !important;
+}
+
+/* ============================================================
+   WIN FLASH OVERLAY
+   ============================================================ */
+.win-flash {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 300;
+    animation: flashAnim 0.8s ease forwards;
+}
+
+@keyframes flashAnim {
+    0%   { background: rgba(255, 215, 0, 0.4); }
+    100% { background: rgba(255, 215, 0, 0);   }
+}
+
+/* ============================================================
+   JACKPOT BANNER
+   ============================================================ */
+.jackpot-banner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'videophreak', sans-serif;
+    font-size: 72px;
+    color: gold;
+    text-shadow: 0 0 40px gold, 0 0 80px orange, 2px 2px 0 #000;
+    -webkit-text-stroke: 2px #000;
+    z-index: 400;
+    pointer-events: none;
+    animation: jackpotPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    white-space: nowrap;
+}
+
+@keyframes jackpotPop {
+    from { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+    to   { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
+}
+
+/* ============================================================
+   THEME MANAGER PANEL
+   ============================================================ */
+.theme-panel {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    width: 240px;
+    background: var(--panel-bg);
+    border: 2px solid var(--btn-border);
+    border-radius: 20px;
+    padding: 20px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    z-index: 200;
+    box-shadow: 0 0 24px var(--btn-shadow);
+    animation: dropIn 0.2s ease;
+}
+
+.theme-panel-title {
+    font-family: 'videophreak', sans-serif;
+    font-size: 22px;
+    color: #333;
+    text-align: center;
+}
+
+.theme-opt-btn {
+    font-size: 18px !important;
+    padding: 10px 0 !important;
+    width: 200px !important;
+}
+
+/* ============================================================
+   LOSE SCREEN OVERLAY
+   ============================================================ */
+.lose-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 500;
+    animation: screenFadeIn 0.3s ease;
+}
+
+.lose-card {
+    background: linear-gradient(160deg, #1a0030 0%, #3d0060 100%);
+    border: 3px solid var(--btn-shadow);
+    border-radius: 28px;
+    padding: 50px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 0 60px var(--btn-shadow);
+    max-width: 480px;
+    text-align: center;
+}
+
+.lose-icon { font-size: 80px; animation: shake 0.5s ease 3; }
+
+@keyframes shake {
+    0%, 100% { transform: rotate(0deg); }
+    25%       { transform: rotate(-12deg); }
+    75%       { transform: rotate(12deg); }
+}
+
+.lose-title {
+    font-family: 'videophreak', sans-serif;
+    font-size: 54px;
+    color: #ff6b6b;
+    text-shadow: 0 0 24px #f00, 2px 2px 0 #000;
+    -webkit-text-stroke: 1px #000;
+}
+
+.lose-sub {
+    font-family: 'videophreak', sans-serif;
+    font-size: 20px;
+    color: var(--accent);
+    text-shadow: 0 0 8px var(--glow);
+    line-height: 1.6;
+}
+
+.lose-btn {
+    width: 280px !important;
+    font-size: 22px !important;
+}
+
+.lose-btn-secondary {
+    background-color: #555 !important;
+    box-shadow: none !important;
+}
+
+/* ============================================================
+   COIN COUNTER ANIMATION
+   ============================================================ */
+@keyframes coinPop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.25); }
+    70%  { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+
+.balance-pop { animation: coinPop 0.35s ease; }
+
+/* ============================================================
+   SCROLLBAR (just in case on smaller screens)
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--btn-bg); border-radius: 3px; }
