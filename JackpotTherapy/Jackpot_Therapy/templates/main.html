@@ -14,7 +14,7 @@
 <body>
 
     <!-- ===== BACKGROUND ===== -->
-    <img src="../images/TitleScreen.jpg" class="background" id="background" alt="Background">
+    <img src="{% static 'images/TitleScreen.jpg' %}" class="background" id="background" alt="Background">
 
     <!-- ===== AUDIO ===== -->
     <audio src="../sounds/music.mp3" id="music" loop></audio>
@@ -30,10 +30,10 @@
     <!-- ============================================================ -->
     <div class="screen" id="screen-title">
         <div class="title-screen-container">
-            <img src="../images/welcome-sign.png" class="welcome-sign-img" alt="Welcome Sign">
+            <img src="{% static 'images/welcome-sign.png' %}" class="welcome-sign-img" alt="Welcome Sign">
             <h1 class="title" id="titleText"><strong>Jackpot Therapy</strong></h1>
             <p class="subtitle">Fortune Machine</p>
-            <img src="../images/slot-machine.png" class="slot-machine-img" alt="Slot Machine">
+            <img src="{% static 'images/slot-machine.png' %}" class="slot-machine-img" alt="Slot Machine">
             <button class="open title-play-btn" id="startButton">PLAY NOW</button>
         </div>
     </div>
@@ -46,7 +46,7 @@
         <div class="profile-select-grid" id="profileGrid">
             <!-- createNew card -->
             <div class="profile-card" id="createNewProfile" data-index="0">
-                <img src="../images/Avatars/createNew.png" alt="Create New">
+                <img src="{% static 'images/Avatars/createNew.png' %}" alt="Create New">
                 <span>New Profile</span>
             </div>
             <!-- saved profile cards injected by JS -->
@@ -63,9 +63,9 @@
         <div class="avatar-carousel">
             <button class="open carousel-btn" id="selectLeftButton">＜</button>
             <div class="avatar-stage">
-                <img src="../images/Avatars/10.png" class="avatar-side left-avatar"  id="avatarSelectLeft"  alt="Left Avatar">
-                <img src="../images/Avatars/1.png"  class="avatar-center"            id="avatarSelectMid"   alt="Selected Avatar">
-                <img src="../images/Avatars/2.png"  class="avatar-side right-avatar" id="avatarSelectRight" alt="Right Avatar">
+                <img src="{% static 'images/Avatars/10.png' %}" class="avatar-side left-avatar"  id="avatarSelectLeft"  alt="Left Avatar">
+                <img src="{% static 'images/Avatars/1.png' %}"  class="avatar-center"            id="avatarSelectMid"   alt="Selected Avatar">
+                <img src="{% static 'images/Avatars/2.png' %}"  class="avatar-side right-avatar" id="avatarSelectRight" alt="Right Avatar">
             </div>
             <button class="open carousel-btn" id="selectRightButton">＞</button>
         </div>
@@ -93,7 +93,7 @@
         <!-- HUD Top Bar -->
         <div class="hud-bar">
             <div class="hud-left">
-                <img src="../images/Avatars/1.png" class="hud-avatar" id="hudAvatar" alt="Player Avatar">
+                <img src="{% static 'images/Avatars/1.png' %}" class="hud-avatar" id="hudAvatar" alt="Player Avatar">
                 <div class="hud-info">
                     <span class="hud-name"  id="profileName">Player</span>
                     <span class="hud-balance" id="balance">$1,000</span>
@@ -109,13 +109,13 @@
         <div class="slot-stage">
             <div class="reel-wrapper">
                 <div class="reel" id="reel1">
-                    <img src="../images/Icons/1.png" id="slot1" alt="Slot 1">
+                    <img src="{% static 'images/Icons/1.png' %}" id="slot1" alt="Slot 1">
                 </div>
                 <div class="reel" id="reel2">
-                    <img src="../images/Icons/2.png" id="slot2" alt="Slot 2">
+                    <img src="{% static 'images/Icons/2.png' %}" id="slot2" alt="Slot 2">
                 </div>
                 <div class="reel" id="reel3">
-                    <img src="../images/Icons/3.png" id="slot3" alt="Slot 3">
+                    <img src="{% static 'images/Icons/3.png' %}" id="slot3" alt="Slot 3">
                 </div>
             </div>
         </div>
