@@ -119,8 +119,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "staticfiles",
-    BASE_DIR / "Jackpot_Therapy" / "static",
+    # BASE_DIR / "staticfiles",
+    BASE_DIR / "Jackpot_Therapy" / "static"
 ]
 
 STATIC_ROOT = BASE_DIR / "static_root"

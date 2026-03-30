@@ -198,7 +198,7 @@ button.disabled {
     position: relative;
     width: 62%;
     min-height: 80vh;
-    background-image: url('../images/purple-background.jpg');
+    background-image: url('/static/images/purple-background.jpg');
     background-size: cover;
     border-radius: 20px;
     display: flex;
