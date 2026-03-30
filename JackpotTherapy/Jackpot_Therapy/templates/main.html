@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jackpot-Therapy</title>
-    <script src="main.js" defer></script>
+    <script src="{% static 'main.js' %}" defer></script>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <style>
         @import url('https://fonts.cdnfonts.com/css/videophreak');
     </style>
 </head>
-<body>
+<body data-static-root="{% static '' %}">
 
     <!-- ===== BACKGROUND ===== -->
     <img src="{% static 'images/TitleScreen.jpg' %}" class="background" id="background" alt="Background">
